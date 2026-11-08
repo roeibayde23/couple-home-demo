@@ -1,0 +1,1 @@
+Static demo only. Data stays in each browser. No backend, accounts, household sync or real pairing.
