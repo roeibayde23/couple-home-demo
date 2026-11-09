@@ -1,6 +1,5 @@
 CASA static demo · GitHub Pages couple-home-demo
 Live: https://roeibayde23.github.io/couple-home-demo/
-Cache-bust: ?v=1794258235
-SW cache: casa-shell-v62
-Source of truth (edit locally): /workspace/couple-home-prototype/ @ 883ef45
-Sync: copy app.js style.css cloud.js sw.js index.html fonts/ assets/ vendor/ into this deploy checkout, bump ?v= on asset URLs + SW cache name, commit + push.
+Cache-bust: ?v=1794262150
+SW cache: casa-shell-v63
+Source of truth: /workspace/couple-home-prototype/ @ 3ed6c89

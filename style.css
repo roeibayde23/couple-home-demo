@@ -575,3 +575,29 @@ svg.casa-logo{width:168px!important;height:44px!important;display:block;max-widt
   .prof-photo{width:100px;height:100px}
   .housechip{font-size:11px}
 }
+
+
+/* ===== Welcome A (first-open) ===== */
+.shell.welcome-shell{max-width:420px;padding:28px 24px 40px;min-height:100dvh;display:flex;flex-direction:column}
+.welcome.welcome-a{display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;margin:0 auto;width:100%;max-width:360px;flex:1}
+.welcome-a-logo{margin-top:8px;margin-bottom:8px;line-height:0}
+.welcome-a-logo .casa-logo-wrap,
+.welcome-a-logo .casa-logo-wrap .casa-logo,
+.welcome-a-logo svg.casa-logo{width:188px!important;height:50px!important;max-width:70vw;margin:0 auto;filter:drop-shadow(0 8px 18px rgba(0,0,0,.22))}
+.welcome-a-hero{width:100%;max-width:280px;margin:18px auto 8px}
+.welcome-a-hero svg{width:100%;height:auto;display:block;filter:drop-shadow(0 16px 28px rgba(0,0,0,.28))}
+.welcome.welcome-a h1{font-family:'Montserrat Alternates',Fredoka,Arial,sans-serif;font-weight:600;font-size:32px;line-height:1.22;letter-spacing:-.5px;color:#FFF9DC!important;margin:10px 0 8px;max-width:320px}
+.welcome.welcome-a .welcome-a-sub{color:#D7E2B8!important;font-size:13.5px;line-height:1.45;margin:0 auto 28px;max-width:340px;display:grid;gap:4px;justify-items:center;text-align:center}
+.welcome.welcome-a .welcome-a-line1{display:block;font-size:13px;letter-spacing:.01em;max-width:100%;white-space:normal}
+.welcome.welcome-a .welcome-a-line2{display:block;font-size:13.5px;color:#D7E2B8}
+.welcome-a-actions{width:100%;max-width:320px;margin-top:auto;display:grid;gap:4px;justify-items:center}
+.welcome.welcome-a .primary{width:100%;margin-top:0;background:#97633d;color:#fffcf0;border-radius:16px;padding:16px 20px;font-size:17px;box-shadow:0 10px 24px rgba(0,0,0,.22)}
+.welcome.welcome-a .welcome-a-account{margin-top:14px;color:#f1dd81!important;font-size:14px;text-decoration:underline;text-underline-offset:4px;background:none;border:0;padding:6px 8px}
+.welcome.welcome-a .welcome-a-demo{margin-top:6px;color:#b9c89a!important;font-size:12px;opacity:.85;text-decoration:underline;text-underline-offset:3px;background:none;border:0;padding:4px 8px}
+.welcome.welcome-a .welcome-a-tag{margin-top:22px;font-size:12px;color:#b9c89a;letter-spacing:.2px}
+@media(max-width:700px){
+  .shell.welcome-shell{padding:22px 20px 32px}
+  .welcome.welcome-a h1{font-size:30px}
+  .welcome-a-logo .casa-logo-wrap .casa-logo,
+  .welcome-a-logo svg.casa-logo{width:168px!important;height:44px!important}
+}
