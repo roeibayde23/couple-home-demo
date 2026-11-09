@@ -506,3 +506,72 @@ svg.casa-logo{width:168px!important;height:44px!important;display:block;max-widt
 .exp-review:hover{background:rgba(246,238,184,.12);border-color:rgba(246,238,184,.55)}
 .exp-review svg{flex:0 0 auto;opacity:.9}
 .exp-monthpick{flex:1 1 auto;min-width:0}
+/* CASA v6 — accounts & sync */
+.authshell .authtop{justify-content:center}
+.authcard h1{margin-bottom:8px}
+.authcard form{margin-top:18px}
+.authcard label{display:block;font-size:13px;margin-bottom:6px}
+.authcard input{width:100%}
+.authcard .secondary{width:100%;margin-top:10px}
+.formerror{min-height:18px;font-size:13px;color:#a2482c;margin:8px 0 0}
+.codeinput{font-size:28px!important;letter-spacing:.45em;text-align:center;font-variant-numeric:tabular-nums;padding:14px 10px!important}
+.emailchip{display:inline-block;background:var(--soft);border-radius:999px;padding:2px 10px;font-size:13px;margin-top:4px;overflow-wrap:anywhere}
+.resend{display:block;margin:14px auto 0}
+.quiet.inline{font-size:11px}
+.memberrow{display:flex;align-items:center;gap:10px;margin-top:12px;font-weight:600}
+.syncpill{font-size:11px;padding:4px 10px;border-radius:999px;background:var(--soft);color:var(--muted);white-space:nowrap}
+.syncpill.ok{background:#e3ecc0;color:#40592a}
+.syncpill.wait{background:#f3e3c4;color:#88613d}
+.syncbanner{margin-bottom:12px}
+#household-card .qr{width:210px;height:210px}
+.authcard h1{color:var(--ink)!important}
+.authcard .onboardingstep{color:var(--brown)!important;font-weight:600}
+.formerror:empty{min-height:0;margin:0}
+.authcard .quiet{display:block;margin:14px auto 0}
+.authcard .quiet.inline{display:inline;margin:0;font-size:11px;color:var(--green)}
+.authcard .footnote .quiet.inline{display:inline!important;color:var(--green)!important;background:none!important;padding:0!important;border:0!important;box-shadow:none!important;width:auto!important;min-height:0!important;text-decoration:underline}
+
+/* N-member avatar accents */
+.member-slot-A{background:#d2d98c;color:#365928}
+.member-slot-B{background:#eadfce;color:#7a5235}
+.member-slot-C{background:#cfe0f2;color:#2f4f6f}
+.member-slot-D{background:#f0d0d8;color:#7a3548}
+.member-slot-E{background:#d9c8f0;color:#4a356f}
+.member-slot-F{background:#c8e8e0;color:#2f5f55}
+.member-slot-G{background:#f2e0b8;color:#6f552f}
+.member-slot-H{background:#d8e8c8;color:#3f5f2f}
+.member-slot-I{background:#e8d0f0;color:#5f2f6f}
+.member-slot-J{background:#d0f0e8;color:#2f6f5f}
+.member-slot-K{background:#f0e8d0;color:#6f5f2f}
+.member-slot-L{background:#e0d0f0;color:#4f2f6f}
+.memberrow .avatar{width:36px;height:36px}
+
+/* FILEY-like lean profile + household settings */
+.settings-stack{display:grid;gap:18px;max-width:520px}
+.profile-card{padding-top:28px}
+.prof-hero{display:grid;justify-items:center;gap:12px;text-align:center}
+.prof-photo{position:relative;width:112px;height:112px;border-radius:50%;padding:0;border:0;background:transparent}
+.prof-av{width:112px!important;height:112px!important;font-size:42px;border-width:3px}
+.prof-cam{position:absolute;left:2px;bottom:2px;width:34px;height:34px;border-radius:50%;background:var(--green);color:#fffcf0;display:grid;place-items:center;border:2px solid var(--paper);box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.prof-name-input{max-width:260px;text-align:center;font-size:18px;font-weight:700;background:var(--soft);border-radius:14px;padding:12px 14px}
+.prof-mail{font-size:13px;color:var(--muted);margin:0;direction:ltr}
+.fieldlab{display:block;font-size:13px;color:var(--muted);margin:14px 0 6px}
+.members-block{margin-top:18px;padding-top:8px;border-top:1px solid var(--line)}
+.housechip{display:block;font-size:12px;font-weight:600;color:var(--flesh-2,#f6eeb8);opacity:.92;margin-top:2px;letter-spacing:.2px}
+.brandtext{display:flex;flex-direction:column;align-items:flex-start;gap:0;line-height:1.15}
+.photo-sheet{position:fixed;inset:0;background:rgba(28,44,18,.55);z-index:35;display:grid;align-items:end}
+.photo-sheet[hidden]{display:none!important}
+.photo-sheet-inner{background:var(--paper);border-radius:22px 22px 0 0;padding:14px 18px max(22px,env(safe-area-inset-bottom));display:grid;gap:4px}
+.photo-sheet-handle{width:42px;height:4px;border-radius:99px;background:var(--line);margin:4px auto 10px}
+.photo-sheet-inner h3{margin:0 0 8px;font-size:17px;text-align:center}
+.photo-sheet-inner button{width:100%;text-align:right;padding:14px 8px;border-radius:12px;font-size:16px;background:transparent}
+.photo-sheet-inner button:active{background:var(--soft)}
+.photo-sheet-inner .dangerish{color:#93452e}
+.photo-sheet-inner .quiet{text-align:center;margin-top:6px}
+#household-card h2{margin:0 0 4px}
+#save-house-name,#save-profile{min-width:140px}
+@media(max-width:700px){
+  .prof-av{width:100px!important;height:100px!important;font-size:36px}
+  .prof-photo{width:100px;height:100px}
+  .housechip{font-size:11px}
+}
