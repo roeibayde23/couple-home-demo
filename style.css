@@ -10,3 +10,384 @@
 :root{--cream:#fcf8e8;--paper:#fffcf0;--green:#365928;--sage:#cfdc7b;--soft:#f2e7ab;--ink:#2d3922;--muted:#65683f;--line:#e2d9a8;--brown:#97633d;--flesh:#f1dd81;--fresh:#86af37;--pit-light:#c69660}.nav{background:rgba(252,248,232,.98)}.demo{background:#f3eac5;color:#715b35}.avatar{background:var(--sage)}.filtertabs button,.shoppingfilters button{border-color:#ced187}.shoppingfilters button.selected{border-color:var(--green)}.progressbar{background:var(--soft)}.progressbar>span{background:var(--fresh)}.quantity{background:var(--cream)}.mealart,.heroscene{background:var(--sage)}.uploadlabel{background:var(--soft)}
 input{background:var(--paper)}
 .purchasecheck{width:36px;height:36px;position:relative}.purchasecheck::before{content:"";position:absolute;inset:-4px}
+/* CASA dark avocado skin palette — dominates chrome; cream for readable content surfaces */
+:root{--cream:#f7f3e4;--paper:#fffcf0;--green:#2f4a1e;--green-mid:#3b5a23;--green-deep:#243816;--sage:#cfdc7b;--fresh:#86af37;--soft:#efe4a8;--flesh:#f1dd81;--ink:#1f2a16;--muted:#5c6548;--line:#d7cfa3;--brown:#97633d;--pit-light:#c69660}
+body{background:linear-gradient(180deg,#e8efd4 0%,var(--cream) 180px);color:var(--ink)}
+.top{border-bottom-color:rgba(47,74,30,.18)}
+.brand{gap:12px;align-items:center}
+.casa-logo{width:42px;height:42px;flex-shrink:0;display:block}
+.brandtext{display:flex;flex-direction:column;align-items:flex-start;gap:1px}
+.brandname{font-size:13px;letter-spacing:.28em;font-weight:bold;color:var(--green);line-height:1}
+.greeting{font-size:20px;font-weight:bold;color:var(--ink);letter-spacing:0}
+.brand small,.brand .brandname+*{ }
+.demo{background:#2f4a1e;color:#f4efd4;border-radius:0;font-weight:600}
+.primary{background:var(--green);color:#fffcf0}
+.primary:hover{background:var(--green-mid)}
+.secondary{border-color:rgba(47,74,30,.28);background:var(--paper);color:var(--green)}
+.gear{border-color:rgba(47,74,30,.25);background:var(--paper);color:var(--green)}
+.nav{background:rgba(47,74,30,.96);border-top:0;gap:18px}
+.nav button{color:#d7e2b8}
+.nav button.active{background:var(--flesh);color:var(--green-deep);font-weight:bold}
+.nav svg{stroke:currentColor}
+.card{border-color:rgba(47,74,30,.14);box-shadow:0 10px 28px rgba(36,56,22,.05)}
+.quiet{color:var(--green-mid)}
+.progressbar>span{background:var(--fresh)}
+.purchasecheck.done,.check.done{background:var(--green);border-color:var(--green)}
+.filtertabs button.selected,.shoppingfilters button.selected,.menutabs button.selected{background:var(--green);border-color:var(--green);color:#fffcf0}
+.avatar{background:var(--sage);color:var(--green-deep);border-color:#fffcf0}
+.eyebrow{color:var(--brown)}
+/* Calendar */
+.calweeks{display:grid;gap:10px}
+.calweeklabel{font-size:11px;color:var(--brown);font-weight:bold;letter-spacing:.04em}
+.calrow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.calday{display:grid;gap:2px;place-items:center;padding:8px 2px 6px;border-radius:14px;background:var(--cream);border:1px solid transparent;min-height:64px;color:var(--ink)}
+.calday.today{border-color:var(--fresh)}
+.calday.selected{background:var(--green);color:#fffcf0;border-color:var(--green)}
+.calday.has:not(.selected){background:#eef4d8}
+.calwd{font-size:10px;opacity:.75}
+.calday strong{font-size:15px;line-height:1}
+.caldots{display:flex;gap:3px;height:6px;align-items:center}
+.caldots i,.dayitem .dot{width:6px;height:6px;border-radius:50%;display:inline-block;background:var(--fresh)}
+.caldots i.bill,.dayitem .dot.bill{background:var(--brown)}
+.caldots i.date,.dayitem .dot.date{background:#6b8f3a}
+.caldots i.meal,.dayitem .dot.meal{background:#d4a017}
+.caldots i.shop,.dayitem .dot.shop{background:var(--green)}
+.calday.selected .caldots i{background:#fffcf0}
+.daypanel{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.dayitem{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.dayitem:last-child{border:0}
+.dayitem small{display:block;color:var(--muted);margin-top:2px;font-size:12px}
+/* Restaurant menu book */
+.menubook{max-width:760px;margin:0 auto;background:var(--paper);border:1px solid rgba(47,74,30,.16);border-radius:22px;padding:28px 22px 18px;box-shadow:0 18px 40px rgba(36,56,22,.08)}
+.menubook-top{display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.18em;color:var(--brown);border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:8px;font-weight:bold}
+.menusection{padding:22px 0;border-bottom:1px dashed rgba(47,74,30,.22)}
+.menusection:last-of-type{border-bottom:0}
+.menusection-head{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:18px}
+.menusection-head h2{font-size:22px;letter-spacing:.04em;color:var(--green-deep);font-family:Georgia,'Times New Roman',serif}
+.ornament{color:var(--brown);font-size:14px}
+.menudish{padding:12px 0 16px}
+.menudish-main{display:block;width:100%;text-align:right;padding:0}
+.menudish-row{display:flex;align-items:baseline;gap:10px}
+.menudish-name{font-size:18px;font-weight:bold;color:var(--green-deep);font-family:Georgia,'Times New Roman',serif}
+.leaders{flex:1;border-bottom:1px dotted rgba(47,74,30,.35);transform:translateY(-4px);min-width:24px}
+.menudish-time{font-size:13px;color:var(--brown);font-variant-numeric:tabular-nums}
+.menudish-note{margin-top:6px;font-size:13px;color:var(--muted);font-style:italic}
+.menudish-ings{margin-top:8px;font-size:12px;color:var(--green-mid);line-height:1.6}
+.menudish-ings span{font-weight:bold;color:var(--brown);margin-left:6px}
+.menudish-actions{display:flex;gap:12px;margin-top:8px}
+.menu-add{margin-top:18px;text-align:center}
+.inglist{margin:10px 0 0;padding:0 18px 0 0;color:var(--muted)}
+.meal-edit-card label{display:grid;gap:6px;margin-bottom:14px;font-size:13px;color:var(--muted)}
+.meal-edit-card input,.meal-edit-card textarea,.meal-edit-card select,.ing-input{width:100%;background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:11px 12px;color:var(--ink)}
+.ing-input{margin-bottom:8px}
+.plannedbox{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:8px}
+.planned-btn{text-align:right}
+@media(max-width:700px){.casa-logo{width:38px;height:38px}.greeting{font-size:17px}.brandname{font-size:11px;letter-spacing:.22em}.nav{gap:0;justify-content:space-around}.nav button{min-width:0;flex:1;font-size:11px;padding:6px 4px}.calday{min-height:58px;padding:6px 1px;border-radius:12px}.menubook{padding:22px 16px 12px;border-radius:18px}.menudish-name{font-size:16px}.menusection-head h2{font-size:19px}}
+.menudish-visual{height:72px;border-radius:14px;overflow:hidden;margin-bottom:10px;background:#e7efc8}
+.menudish-visual svg,.menudish-visual .mealart{width:100%;height:72px;display:block}
+.menudish-visual .mealart{height:72px;margin:0;border-radius:0}
+/* CASA v2 — dark avocado surfaces dominate; cream is accent text/controls */
+:root{--bg:#243816;--bg-2:#2f4a1e;--panel:#354f22;--panel-2:#3b5a23;--cream:#f7f3e4;--paper:#fffcf0;--green:#2f4a1e;--green-mid:#3b5a23;--green-deep:#1c2c12;--sage:#cfdc7b;--fresh:#86af37;--soft:#efe4a8;--flesh:#f1dd81;--ink:#f4efd8;--muted:#d5ddb4;--line:rgba(241,221,129,.22);--brown:#c69660;--pit-light:#e2b47a}
+html,body{background:var(--bg);color:var(--ink)}
+body{background:radial-gradient(1200px 500px at 50% -80px,#3b5a23 0%,var(--bg) 55%)}
+.shell{color:var(--ink)}
+.top{border-bottom:1px solid rgba(241,221,129,.18)}
+.brandname,.greeting{color:var(--flesh)}
+.brandname{color:var(--sage)}
+.demo{background:#1c2c12;color:var(--flesh)}
+.head h1,.cardhead h2,.cardhead h3,h1,h2,h3{color:var(--paper)}
+.head p,.sub,.footnote,.notice,.onboardingstep,.eyebrow{color:var(--muted)}
+.eyebrow{color:var(--brown)}
+.card,.menubook,.shopcomposer,.grocerygroup,.boughtsection,.shoppingprogress,.meal-edit-card,.menu-add{background:var(--panel);border-color:rgba(241,221,129,.16);box-shadow:0 14px 34px rgba(0,0,0,.22);color:var(--ink)}
+.primary{background:var(--flesh);color:var(--green-deep)}
+.secondary,.quiet{color:var(--flesh);border-color:rgba(241,221,129,.28);background:transparent}
+.quiet{text-decoration-color:rgba(241,221,129,.45)}
+.gear{background:rgba(255,252,240,.08);border-color:rgba(241,221,129,.28);color:var(--flesh)}
+.nav{background:#1c2c12}
+.nav button{color:#d7e2b8}
+.nav button.active{background:var(--flesh);color:var(--green-deep)}
+.avatar{background:var(--sage);color:var(--green-deep)}
+input,select,textarea,#add-qty,#add-unit,.ing-input,.meal-edit-card input,.meal-edit-card textarea,.meal-edit-card select{background:#2a4019;border-color:rgba(241,221,129,.22);color:var(--paper)}
+input::placeholder,textarea::placeholder{color:#a9b68a}
+.calday{background:#2a4019;color:var(--paper);border-color:transparent}
+.calday.has:not(.selected){background:#405c28}
+.calday.today{box-shadow:inset 0 0 0 2px var(--fresh)}
+.calday.selected{background:var(--flesh);color:var(--green-deep);border-color:var(--flesh)}
+.calday.selected .caldots i{background:var(--green-deep)}
+.calweeklabel{color:var(--brown)}
+.daypanel{border-top-color:rgba(241,221,129,.18)}
+.dayitem{border-bottom-color:rgba(241,221,129,.12)}
+.dayitem strong{color:var(--paper)}
+.menubook{background:linear-gradient(180deg,#314820,#2a3f1a);border:1px solid rgba(241,221,129,.25)}
+.menubook-top{color:var(--flesh);border-bottom-color:rgba(241,221,129,.25)}
+.menusection{border-bottom-color:rgba(241,221,129,.2)}
+.menusection-head h2,.menudish-name{color:var(--flesh);font-family:Georgia,'Times New Roman',serif}
+.ornament,.menudish-time{color:var(--brown)}
+.menudish-note{color:#c9d4a8}
+.menudish-ings{color:#dce6b5}
+.menudish-ings span{color:var(--brown)}
+.leaders{border-bottom-color:rgba(241,221,129,.35)}
+.menudish-visual{background:#243816}
+.progressbar{background:#243816}
+.progressbar>span{background:var(--fresh)}
+.shop-row,.task{border-bottom-color:rgba(241,221,129,.12)}
+.productname,.tasktext{color:var(--paper)}
+.quantity{background:#243816;border-color:rgba(241,221,129,.2);color:var(--paper)}
+.filtertabs button,.shoppingfilters button,.quickproducts button,.planned-btn{background:#2a4019;border-color:rgba(241,221,129,.22);color:var(--paper)}
+.filtertabs button.selected,.shoppingfilters button.selected{background:var(--flesh);color:var(--green-deep);border-color:var(--flesh)}
+.sectionlinks button{background:#2a4019;border-color:rgba(241,221,129,.2);color:var(--paper)}
+.notice{background:#243816;color:var(--muted)}
+.toast{background:var(--flesh);color:var(--green-deep)}
+.welcome h1,.center h1{color:var(--paper)}
+.welcome p,.center p{color:var(--muted)}
+.heroscene,.mealart{background:#314820}
+.features span{border-color:rgba(241,221,129,.25);color:var(--muted)}
+.link{background:#243816;color:var(--sage)}
+.expense{color:var(--flesh)}
+.purchasecheck,.check{background:#243816;border-color:rgba(241,221,129,.35);color:var(--paper)}
+.purchasecheck.done,.check.done{background:var(--fresh);border-color:var(--fresh);color:var(--green-deep)}
+.completed{opacity:.55}
+.uploadlabel{background:#2a4019;color:var(--paper)}
+@media(max-width:700px){body{background:var(--bg)}}
+.calday.today{box-shadow:inset 0 0 0 2px var(--fresh)}
+.calday.selected{background:var(--flesh)!important;color:var(--green-deep)!important;border-color:var(--flesh);box-shadow:none}
+.calday.today.selected{outline:2px solid var(--fresh);outline-offset:2px}
+/* CASA v3 — cut avocado: dark skin surround, buttery flesh cards, brown pit accents */
+:root{
+  --skin:#2F4A1E;
+  --skin-deep:#243816;
+  --skin-mid:#3B5A23;
+  --flesh:#F6EEB8;
+  --flesh-2:#F3E9A6;
+  --paper:#FFF9DC;
+  --pit:#8B5A2B;
+  --pit-light:#C69660;
+  --fresh:#86AF37;
+  --ink:#243816;
+  --muted:#5c6548;
+  --line:rgba(47,74,30,.14);
+  --cream:#F6EEB8;
+  --green:#2F4A1E;
+  --green-mid:#3B5A23;
+  --green-deep:#1c2c12;
+  --sage:#CFDC7B;
+  --soft:#F3E9A6;
+  --brown:#8B5A2B;
+}
+html,body{background:var(--skin-deep);color:var(--ink)}
+body{background:radial-gradient(1000px 420px at 50% -40px,var(--skin-mid),var(--skin-deep) 60%)}
+.shell{color:var(--ink)}
+.top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;border-bottom:1px solid rgba(246,238,184,.18);padding:10px 0 14px;margin-bottom:18px;min-height:74px}
+.top .side{display:flex;align-items:center;gap:8px}
+.top .side.left{justify-content:flex-start}
+.top .side.right{justify-content:flex-end;min-height:36px}
+.centerbrand,.brand.centerbrand{justify-self:center;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;background:none;border:0;padding:0}
+.brandtext{display:flex;flex-direction:column;align-items:center;gap:1px}
+.casa-logo{width:46px;height:46px}
+.brandname{font-family:Georgia,'Times New Roman',serif;font-size:22px;letter-spacing:.34em;color:var(--flesh);font-weight:normal;padding-right:.34em}
+.greeting{font-size:13px;color:#d7e2b8;font-weight:600}
+.demo{background:var(--skin);color:var(--flesh);border-radius:0}
+.card,.menubook,.shopcomposer,.grocerygroup,.boughtsection,.shoppingprogress,.meal-edit-card,.menu-add,.calendarcard,.quickcard,.mealcard,.upcomingcard{background:var(--flesh)!important;color:var(--ink)!important;border:1px solid rgba(47,74,30,.12)!important;box-shadow:0 12px 30px rgba(0,0,0,.18)!important}
+.head h1,h1,h2,h3,.cardhead h2,.cardhead h3,.productname,.tasktext,.menudish-name,.dayitem strong{color:var(--ink)!important}
+.head p,.sub,.footnote,.notice,.eyebrow,.menudish-note,.menudish-ings,.dayitem small{color:var(--muted)!important}
+.eyebrow{color:var(--pit)!important;font-weight:700}
+.primary{background:var(--pit)!important;color:#fff8e8!important;border:0}
+.secondary,.quiet{color:var(--skin)!important;border-color:rgba(47,74,30,.22)!important;background:transparent}
+.gear{background:rgba(246,238,184,.12);border-color:rgba(246,238,184,.28);color:var(--flesh)}
+.nav{background:var(--skin-deep);border-top:1px solid rgba(246,238,184,.12)}
+.nav button{color:#d7e2b8}
+.nav button.active{background:var(--flesh);color:var(--skin-deep);font-weight:bold}
+.avatar{background:var(--flesh-2);color:var(--skin);border-color:rgba(246,238,184,.5)}
+input,select,textarea,#add-qty,#add-unit,.ing-input,.meal-edit-card input,.meal-edit-card textarea,.meal-edit-card select,.quantity{background:var(--paper)!important;border-color:rgba(47,74,30,.16)!important;color:var(--ink)!important}
+.filtertabs button,.shoppingfilters button,.quickproducts button,.planned-btn,.sectionlinks button{background:var(--paper)!important;border-color:rgba(47,74,30,.16)!important;color:var(--ink)!important}
+.filtertabs button.selected,.shoppingfilters button.selected{background:var(--pit)!important;color:#fff8e8!important;border-color:var(--pit)!important}
+.notice{background:rgba(139,90,43,.1)!important;color:var(--muted)!important}
+.progressbar{background:rgba(47,74,30,.12)}
+.progressbar>span{background:var(--pit)}
+.purchasecheck,.check{background:var(--paper);border-color:rgba(47,74,30,.28);color:var(--ink)}
+.purchasecheck.done,.check.done{background:var(--skin);border-color:var(--skin);color:var(--flesh)}
+/* Calendar agenda with room for text */
+.calweeks{display:grid;gap:12px}
+.calweeklabel{font-size:12px;color:var(--pit)!important;font-weight:bold}
+.calagenda{display:grid;gap:8px}
+.calday{display:grid;grid-template-columns:64px 1fr;gap:10px;align-items:start;width:100%;text-align:right;padding:10px 12px;border-radius:16px;background:var(--paper)!important;border:1px solid transparent;color:var(--ink)!important;min-height:58px}
+.calday-top{display:grid;gap:2px;justify-items:center;padding-top:2px}
+.calwd{font-size:11px;color:var(--pit);font-weight:700}
+.calday strong{font-size:18px;line-height:1;color:var(--skin)}
+.calday-events{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:28px}
+.calevent{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:700;background:rgba(47,74,30,.08);color:var(--skin)}
+.calevent.shop{background:rgba(47,74,30,.12)}
+.calevent.date{background:rgba(134,175,55,.18);color:#355018}
+.calevent.bill{background:rgba(139,90,43,.16);color:var(--pit)}
+.calevent.meal{background:rgba(240,179,90,.25);color:#7a4e12}
+.calevent.more{background:transparent;color:var(--muted)}
+.calevent.empty{background:transparent;color:#9aa57a;font-weight:500}
+.calday.today{box-shadow:inset 0 0 0 2px var(--fresh)}
+.calday.selected{background:var(--skin)!important;color:var(--flesh)!important;border-color:var(--skin)}
+.calday.selected .calwd,.calday.selected strong{color:var(--flesh)!important}
+.calday.selected .calevent{background:rgba(246,238,184,.2);color:var(--flesh)}
+.calday.selected .calevent.empty{color:#cfd6b4}
+.daypanel{margin-top:14px;padding-top:12px;border-top:1px solid rgba(47,74,30,.12)}
+.dayitem .dot{background:var(--pit)}
+/* Menu as light paper on dark surround */
+.menubook{background:var(--flesh)!important;border:1px solid rgba(139,90,43,.25)!important}
+.menubook-top{color:var(--pit)!important;border-bottom:1px solid rgba(139,90,43,.25)!important;letter-spacing:.2em}
+.menusection-head h2,.menudish-name{color:var(--skin)!important;font-family:Georgia,'Times New Roman',serif}
+.ornament,.menudish-time{color:var(--pit)!important}
+.leaders{border-bottom-color:rgba(139,90,43,.35)!important}
+.menudish-visual{background:#efe6a8}
+.heroscene,.mealart{background:#e8efc0}
+.toast{background:var(--pit);color:#fff8e8}
+.expense{color:var(--pit)}
+.link{background:var(--paper);color:var(--skin)}
+@media(max-width:700px){
+  .top{margin-bottom:14px;min-height:68px}
+  .casa-logo{width:40px;height:40px}
+  .brandname{font-size:18px;letter-spacing:.28em}
+  .greeting{font-size:12px}
+  .calday{grid-template-columns:54px 1fr;padding:9px 10px}
+  .calday strong{font-size:16px}
+  .calevent{font-size:10px;padding:3px 7px}
+}
+/* CASA v3b — readable cream on dark surround; bigger logo; compact agenda */
+.shell > .head, .head{color:#F6EEB8}
+.head .eyebrow,.shell > .head .eyebrow{color:#E2C48A!important}
+.head h1,.shell > .head h1{color:#FFF9DC!important}
+.head p,.shell > .head p{color:#D7E2B8!important}
+.sectionlinks button{color:#243816!important}
+.footnote{color:#D7E2B8!important}
+.footnote .quiet{color:#F6EEB8!important}
+.welcome h1,.center h1{color:#FFF9DC!important}
+.welcome p,.center p,.welcome .eyebrow,.center .onboardingstep,.welcome .footnote,.center .footnote{color:#D7E2B8!important}
+.welcome .secondary,.center .secondary{color:#F6EEB8!important;border-color:rgba(246,238,184,.35)!important}
+.back{color:#F6EEB8!important}
+/* Keep card interiors dark-on-yellow */
+.card h1,.card h2,.card h3,.card p,.card .sub,.card .eyebrow,.menubook h1,.menubook h2,.menubook h3,.menubook p{color:inherit}
+.card .eyebrow{color:var(--pit)!important}
+.card h2,.card h3,.menubook h2,.menudish-name{color:var(--ink)!important}
+.card p,.card .sub,.menudish-note,.menudish-ings{color:var(--muted)!important}
+
+/* Bigger centered avocado + wordmark */
+.top{align-items:end;padding:8px 0 16px;margin-bottom:12px;border-bottom:1px solid rgba(246,238,184,.16)}
+.centerbrand{gap:6px;padding-bottom:2px}
+.casa-logo{width:48px;height:48px;display:block}
+.brandname{font-size:28px;letter-spacing:.42em;color:#FFF9DC!important;line-height:1;padding-right:.42em;margin-top:2px}
+.greeting{font-size:13px;color:#E8F0C8!important;margin-top:4px;line-height:1.2;padding-bottom:2px}
+.side{align-self:center;padding-bottom:18px}
+
+/* Compact one-line agenda rows */
+.calweeks{gap:8px}
+.calweeklabel,.nexttoggle{font-size:11px;margin:2px 0}
+.nexttoggle{display:block;width:100%;text-align:right;background:transparent;border:0;padding:4px 2px;cursor:pointer}
+.calagenda{gap:5px}
+.calday{display:flex;align-items:center;gap:8px;grid-template-columns:unset;min-height:0;padding:7px 10px;border-radius:12px}
+.calday .calwd{min-width:34px;font-size:11px}
+.calday strong{font-size:14px;min-width:18px}
+.calday-events{display:flex;flex-wrap:wrap;gap:4px;min-height:0;flex:1}
+.calevent{padding:2px 7px;font-size:10px}
+.calday.empty{padding:4px 10px;opacity:.72}
+.calday.empty .calday-events{display:none}
+.calday.selected{background:var(--skin)!important}
+.calday.selected .calwd,.calday.selected strong{color:#FFF9DC!important}
+@media(max-width:700px){
+  .casa-logo{width:44px;height:44px}
+  .brandname{font-size:24px;letter-spacing:.36em;padding-right:.36em}
+  .greeting{font-size:12px;margin-top:3px}
+  .top{padding-bottom:14px}
+  .calday{padding:6px 9px}
+  .calday.empty{padding:3px 9px}
+}
+.casa-logo{width:52px!important;height:52px!important}
+.brandname{font-size:30px!important;letter-spacing:.4em!important;color:#FFF9DC!important}
+@media(max-width:700px){
+  .casa-logo{width:46px!important;height:46px!important}
+  .brandname{font-size:26px!important;letter-spacing:.34em!important}
+  .greeting{margin-top:6px!important;padding-bottom:4px!important}
+}
+
+/* v3b polish: header must grow with logo; greeting above divider; surround notices cream */
+.top{height:auto!important;min-height:0!important;align-items:end;padding:10px 0 12px!important;margin-bottom:14px!important;overflow:visible}
+.centerbrand,.brand.centerbrand{padding-bottom:0!important;gap:5px!important;color:#FFF9DC!important}
+.brandtext{color:#FFF9DC!important;align-items:center}
+.casa-logo{width:48px!important;height:48px!important;flex-shrink:0}
+.brandname{font-size:26px!important;letter-spacing:.34em!important;color:#FFF9DC!important;margin:0!important;padding-right:.34em}
+.greeting{font-size:12px!important;color:#E8F0C8!important;margin:2px 0 0!important;padding:0 0 2px!important;line-height:1.15!important}
+.side{align-self:center;padding-bottom:8px!important}
+/* Notices sitting on dark surround (not inside cream cards) */
+.shell > .notice,.menubook + .notice{background:transparent!important;color:#D7E2B8!important;padding-right:0;padding-left:0}
+.card .notice,.shoppingprogress .notice{background:rgba(139,90,43,.1)!important;color:var(--muted)!important}
+.card .footnote{color:var(--muted)!important}
+.shell > .footnote{color:#D7E2B8!important}
+@media(max-width:700px){
+  .casa-logo{width:44px!important;height:44px!important}
+  .brandname{font-size:24px!important;letter-spacing:.3em!important;padding-right:.3em}
+  .top{padding:8px 0 10px!important}
+}
+
+/* ========== CASA v4 — playful logo + cart + calendar grid ========== */
+@font-face{font-family:Fredoka;src:url('fonts/Fredoka.ttf?v=1794223636') format('truetype');font-weight:300 700;font-display:swap}
+
+.casa-logo{width:54px!important;height:54px!important;display:block;filter:drop-shadow(0 2px 0 rgba(36,56,22,.25));transform:rotate(-4deg)}
+.centerbrand,.brand.centerbrand{gap:2px!important;color:#FFF9DC!important}
+.brandname{
+  font-family:Fredoka,Rubik,'Nunito',system-ui,sans-serif!important;
+  font-size:30px!important;font-weight:700!important;letter-spacing:.06em!important;
+  color:#FFF9DC!important;line-height:1!important;padding-right:0!important;
+  text-transform:uppercase;transform:rotate(-2deg);
+  text-shadow:2px 2px 0 rgba(36,56,22,.35);
+  margin-top:0!important;
+}
+.greeting{font-family:Fredoka,Rubik,system-ui,sans-serif!important;font-weight:600!important;font-size:12px!important;margin-top:4px!important;transform:none;letter-spacing:0!important}
+
+/* Real calendar grid */
+.calgrid-wrap{margin-top:4px}
+.calgrid-head,.calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;width:100%}
+.calgrid-head{margin-bottom:4px}
+.calhd{text-align:center;font-size:11px;font-weight:700;color:var(--muted);padding:2px 0}
+.calgrid{gap:3px}
+.calcell{
+  display:flex;flex-direction:column;align-items:stretch;gap:2px;
+  min-height:56px;padding:4px 3px 3px;border-radius:10px;
+  background:var(--paper)!important;border:1.5px solid transparent;color:var(--ink)!important;
+  text-align:right;cursor:pointer;overflow:hidden;
+}
+.calcell .calnum{font-size:12px;font-weight:700;line-height:1;align-self:flex-start;padding-inline-start:1px}
+.calchips{display:flex;flex-direction:column;gap:1px;min-height:0;flex:1;overflow:hidden}
+.calevent{
+  display:block;font-size:9px;line-height:1.15;padding:1px 3px;border-radius:4px;
+  background:#e8efc8;color:#2F4A1E;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:100%
+}
+.calevent.date{background:#f1dd81;color:#5a3a18}
+.calevent.bill{background:#ecd4b8;color:#6a3f1c}
+.calevent.meal{background:#d7e2b8;color:#2F4A1E}
+.calevent.shop{background:#cfe0a8;color:#2F4A1E}
+.calevent.more{background:transparent;color:var(--muted);padding:0 2px;font-weight:600}
+.calcell.today{box-shadow:inset 0 0 0 2px var(--fresh)}
+.calcell.selected{background:var(--skin)!important;border-color:var(--skin);color:#FFF9DC!important}
+.calcell.selected .calnum{color:#FFF9DC!important}
+.calcell.selected .calevent{background:rgba(246,238,184,.92);color:#243816}
+.calcell.outside{opacity:.38}
+.calgrid.month .calcell{min-height:44px;padding:3px 2px}
+.calgrid.month .calevent{font-size:8px}
+.calendarcard .cardhead{margin-bottom:10px}
+.daypanel{margin-top:14px;padding-top:12px;border-top:1px solid rgba(47,74,30,.12)}
+
+/* Kill old agenda layout leftovers */
+.calweeks,.calagenda,.calday,.calweeklabel,.nexttoggle{display:none!important}
+
+@media(max-width:700px){
+  .casa-logo{width:48px!important;height:48px!important}
+  .brandname{font-size:26px!important}
+  .calcell{min-height:52px;padding:3px 2px;border-radius:8px}
+  .calcell .calnum{font-size:11px}
+  .calevent{font-size:8px;padding:1px 2px}
+  .calhd{font-size:10px}
+  .calgrid.month .calcell{min-height:40px}
+}
+.casa-logo{width:56px!important;height:56px!important}
+.brandname{font-size:28px!important;letter-spacing:.04em!important;background:rgba(246,238,184,.12);padding:2px 10px 3px!important;border-radius:12px;border:2px solid rgba(246,238,184,.35)}
+@media(max-width:700px){
+  .casa-logo{width:52px!important;height:52px!important}
+  .brandname{font-size:26px!important}
+}

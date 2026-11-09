@@ -1,1 +1,1 @@
-Static demo only. Data stays in each browser. No backend, accounts, household sync or real pairing.
+CASA static demo · GitHub Pages couple-home-demo
