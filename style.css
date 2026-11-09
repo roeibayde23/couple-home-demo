@@ -325,7 +325,7 @@ input,select,textarea,#add-qty,#add-unit,.ing-input,.meal-edit-card input,.meal-
 }
 
 /* ========== CASA v4 — playful logo + cart + calendar grid ========== */
-@font-face{font-family:Fredoka;src:url('fonts/Fredoka.ttf?v=1794223636') format('truetype');font-weight:300 700;font-display:swap}
+@font-face{font-family:Fredoka;src:url('fonts/Fredoka.ttf') format('truetype');font-weight:300 700;font-display:swap}
 
 .casa-logo{width:54px!important;height:54px!important;display:block;filter:drop-shadow(0 2px 0 rgba(36,56,22,.25));transform:rotate(-4deg)}
 .centerbrand,.brand.centerbrand{gap:2px!important;color:#FFF9DC!important}
@@ -391,3 +391,118 @@ input,select,textarea,#add-qty,#add-unit,.ing-input,.meal-edit-card input,.meal-
   .casa-logo{width:52px!important;height:52px!important}
   .brandname{font-size:26px!important}
 }
+
+
+/* ===== CASA v5 ===== */
+@font-face{font-family:'Montserrat Alternates';src:url('fonts/MontserratAlternates-SemiBold.ttf') format('truetype');font-weight:600;font-style:normal;font-display:swap}
+
+.casa-logo-wrap{display:block;line-height:0}
+.casa-logo-wrap .casa-logo,
+.brand .casa-logo,
+svg.casa-logo{width:168px!important;height:44px!important;display:block;max-width:46vw}
+.centerbrand{gap:2px!important;max-width:min(220px,56vw);overflow:visible}
+.brandtext{align-items:center!important}
+.brandname{display:none!important} /* CASA is inside the SVG logo */
+.greeting{font-size:14px!important;font-weight:600;color:#F6EEB8!important;letter-spacing:0;opacity:.95}
+.top .side{min-width:72px}
+.top .side.right{justify-content:flex-end}
+.iconbtn,.tasksbtn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(246,238,184,.12);color:#F6EEB8;border:1px solid rgba(246,238,184,.22)}
+.iconbtn svg,.tasksbtn svg{width:22px;height:22px}
+.iconbtn:hover,.tasksbtn:hover{background:rgba(246,238,184,.22)}
+
+.homedate{display:flex;align-items:baseline;gap:10px;margin:0 0 16px;padding:12px 16px;border-radius:16px;background:var(--flesh);color:var(--ink);border:1px solid rgba(47,74,30,.14);box-shadow:0 1px 0 rgba(255,249,220,.35) inset}
+.homedate-label{font-size:12px;color:var(--pit);letter-spacing:.04em;font-weight:700}
+.homedate strong{font-size:18px;font-weight:700;color:var(--ink)}
+
+.sectionlinks{display:none!important}
+
+/* Expenses */
+.exp-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 16px}
+.exp-monthpick{flex:1;min-width:120px;text-align:center}
+.exp-monthpick strong{display:block;font-size:18px;color:#F6EEB8}
+.exp-summary .expense{font-size:36px;color:#1c2c12;font-weight:800;margin:10px 0}
+.exp-row{display:grid;grid-template-columns:36px 1fr auto;gap:8px 10px;align-items:center;padding:12px 0;border-bottom:1px solid rgba(47,74,30,.12)}
+.exp-row .exp-del{grid-column:2 / -1;justify-self:start;font-size:12px;color:var(--muted)}
+.exp-ico{font-size:22px;line-height:1;text-align:center}
+.exp-main strong{display:block;color:var(--ink)}
+.exp-main small{color:var(--muted);font-size:12px}
+.exp-amt{font-size:14px;color:var(--green);white-space:nowrap}
+.exp-add{display:grid;gap:10px;margin:12px 0 18px;padding:14px;border-radius:14px;background:rgba(47,74,30,.06)}
+.exp-add label{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.exp-add input,.exp-add select{padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--paper,#fffef9);color:var(--ink)}
+.chartwrap{display:grid;gap:14px}
+.barchart,.piechart{width:100%;max-width:360px;margin:0 auto;background:#243816;border-radius:16px;padding:8px}
+.chartlegend{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.chartlegend li{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:13px;padding:8px 10px;border-radius:10px;background:rgba(246,238,184,.55)}
+.chartlegend .swatch{width:12px;height:12px;border-radius:50%;display:inline-block;margin-left:8px;flex-shrink:0}
+.pieleg li{justify-content:flex-start}
+.pieleg strong{margin-right:auto}
+
+/* Crop editor */
+.crop-modal{position:fixed;inset:0;background:rgba(28,44,18,.72);z-index:40;display:grid;place-items:center;padding:18px}
+.crop-modal[hidden]{display:none!important}
+.crop-sheet{width:min(360px,100%);background:#F6EEB8;color:#243816;border-radius:20px;padding:18px 16px 16px;box-shadow:0 18px 40px rgba(0,0,0,.28)}
+.crop-sheet h2{font-size:20px;margin-bottom:4px}
+.crop-stage{position:relative;width:280px;height:280px;margin:14px auto;border-radius:50%;overflow:hidden;touch-action:none;background:#1c2c12}
+#crop-canvas{display:block;width:280px;height:280px;touch-action:none;cursor:grab}
+.crop-mask{pointer-events:none;position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(246,238,184,.7)}
+.crop-zoom{display:grid;gap:6px;font-size:13px;margin:8px 0 14px}
+.crop-zoom input{width:100%}
+.crop-actions{display:flex;gap:10px}
+.crop-actions .primary,.crop-actions .secondary{flex:1}
+
+.task-del{font-size:12px;margin-right:4px}
+.task{display:grid;grid-template-columns:auto 1fr auto auto;gap:8px;align-items:center}
+
+@media(max-width:700px){
+  .casa-logo-wrap .casa-logo,svg.casa-logo{width:150px!important;height:40px!important}
+  .greeting{font-size:13px!important}
+  .top .side{min-width:64px}
+  .exp-row{grid-template-columns:32px 1fr auto}
+}
+
+/* Dark surround pages already use cream text on dark — keep exp month label readable on dark cards */
+.card .exp-monthpick strong{color:inherit}
+
+/* v5 logo + greeting overrides (after Fredoka rules) */
+.casa-logo-wrap .casa-logo, svg.casa-logo{width:172px!important;height:45px!important;max-width:48vw}
+.centerbrand .greeting{font-size:13px!important;color:#F6EEB8!important;font-family:Arial,'Noto Sans Hebrew',sans-serif!important;margin-top:2px!important;font-weight:600!important}
+.brandname{display:none!important}
+.top .side.right{z-index:2}
+.top .side.left{z-index:2}
+.centerbrand{z-index:1;padding:0 4px}
+
+.exp-add[hidden]{display:none!important}
+.exp-toolbar .secondary#exp-back-month,.exp-toolbar #exp-back-month{background:var(--flesh)!important;color:var(--ink)!important;border:1px solid rgba(47,74,30,.18);font-weight:600}
+.exp-toolbar{color:#F6EEB8}
+.exp-toolbar .filtertabs button{color:var(--ink);background:rgba(246,238,184,.85)}
+.exp-toolbar .filtertabs button.selected{background:var(--pit);color:#FFF9DC}
+.barchart text{fill:#F6EEB8}
+
+#exp-prev,#exp-next{min-width:42px;background:rgba(246,238,184,.16)!important;color:#F6EEB8!important;border:1px solid rgba(246,238,184,.3)!important;border-radius:12px;font-size:18px}
+#exp-analysis{margin-right:auto}
+.exp-monthpick .sub{display:block;color:rgba(246,238,184,.75);font-size:12px}
+.chartlegend{max-height:none}
+
+/* v5 expenses contrast + nav */
+.exp-summary .expense{font-size:36px!important;font-weight:800!important;color:var(--green-deep,#1c2c12)!important;margin:10px 0!important;letter-spacing:-0.02em}
+.card .expense,.exp-summary .expense{color:#1c2c12!important}
+.exp-toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 16px;justify-content:center}
+.exp-navbtn{width:36px;height:36px;padding:0;border-radius:10px;display:grid;place-items:center;background:rgba(246,238,184,.18);color:#F6EEB8;border:1px solid rgba(246,238,184,.28);font-size:22px;line-height:1;flex:0 0 auto}
+.exp-navbtn span{display:block;transform:translateY(-1px)}
+.exp-navbtn:disabled{opacity:.35}
+.exp-navbtn:not(:disabled):hover{background:rgba(246,238,184,.3)}
+.exp-monthpick{flex:1 1 140px;min-width:120px;text-align:center;order:0}
+.exp-toolbar #exp-prev{order:1} /* will be overridden by DOM RTL */
+
+.exp-monthpick strong{display:block;font-size:18px;color:#F6EEB8}
+.exp-monthpick .sub{display:block;color:rgba(246,238,184,.75);font-size:12px}
+.head .eyebrow{display:none!important}
+
+/* subtle review (סקירה) control */
+.exp-toolbar{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;margin:0 0 14px}
+.exp-toolbar #exp-analysis{flex:0 0 auto;order:unset;margin:0;width:auto}
+.exp-review{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;border:1px solid rgba(246,238,184,.35);background:transparent;color:#F6EEB8;font-size:12px;font-weight:600;line-height:1;white-space:nowrap}
+.exp-review:hover{background:rgba(246,238,184,.12);border-color:rgba(246,238,184,.55)}
+.exp-review svg{flex:0 0 auto;opacity:.9}
+.exp-monthpick{flex:1 1 auto;min-width:0}
