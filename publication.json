@@ -1,10 +1,10 @@
 {
   "product": "CASA",
-  "version": "v6.2-welcome-a",
-  "sourceCommit": "3ed6c89e8bf9aab24c75ab3a2eace9a3470b0df9",
-  "cacheBust": "1794262150",
-  "swCache": "casa-shell-v63",
+  "version": "v7.1-header-house-name",
+  "sourceCommit": "cc0861e263a9972c0af51fb64c3c7b4c0873a3a2",
+  "cacheBust": "1794313904",
+  "swCache": "casa-shell-v67",
   "live": "https://roeibayde23.github.io/couple-home-demo/",
   "syncedFrom": "/workspace/couple-home-prototype/",
-  "updatedAt": "2026-11-09T23:09:10+0100"
+  "updatedAt": "2026-11-10T13:32:19+0100"
 }
