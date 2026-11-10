@@ -943,3 +943,57 @@ body.has-nav .superbar{bottom:calc(var(--navh,72px) + 8px)}
 .editrow-thumb,.editrow-thumb .dishphoto,.editrow-thumb .dishph{width:36px;height:36px}
 .editrow-name{font-size:14px;white-space:nowrap;text-overflow:ellipsis;text-decoration:none}
 .editrow select{width:84px}
+
+/* ===================== CASA v7.2: iOS safe-area header, dish hero, avocados ===================== */
+:root{--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px)}
+/* black-translucent + viewport-fit=cover paints under the notch; the header had no top inset (unlike .nav / .supershell). */
+.shell{padding-top:var(--safe-top)}
+.shell.welcome-shell{padding-top:calc(28px + var(--safe-top))}
+@media(max-width:700px){.shell.welcome-shell{padding-top:calc(22px + var(--safe-top))}}
+.supershell{padding-top:var(--safe-top)!important}
+.addbar{top:var(--safe-top)}
+.super-top{top:var(--safe-top)}
+/* dish detail: full-width 4:3 hero, cover, rounded, no overflow */
+.dishhero{width:100%;aspect-ratio:4/3;border-radius:18px;overflow:hidden;margin:0 0 16px;background:var(--flesh-2,#f3e9a6);position:relative}
+.dishhero>.dishphoto,.dishhero>.dishph{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+.dishhero>.dishph{display:grid;place-items:center;color:var(--pit);height:100%}
+.meal-detail{overflow:hidden}
+/* keep only the round pit-brown + */
+.roundadd{background:var(--pit)!important;color:#fff8e8!important}
+/* avocado decorations */
+.avo-tiny,.avo-empty,.avo-mark,.avo-done{display:inline-block;line-height:0;pointer-events:none}
+.avo-tiny .avo,.avo-empty .avo,.avo-mark .avo,.avo-done .avo{display:block;width:100%;height:100%}
+.avo-tiny{width:18px;height:22px;flex:none;margin-inline:2px 6px;vertical-align:middle}
+.cardhead h2.withicon{display:flex;align-items:center;gap:2px}
+.avo-empty{width:52px;height:64px;margin:4px auto 8px}
+.listempty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center}
+.calendarcard{position:relative;overflow:hidden}
+.avo-mark{position:absolute;left:6px;top:118px;width:52px;height:64px;opacity:.12;transform:rotate(-18deg);z-index:0}
+.calendarcard>.cardhead,.calendarcard>.calgrid-wrap,.calendarcard>.daypanel{position:relative;z-index:1}
+.avo-done{width:64px;height:80px;margin:0 auto 10px;display:block}
+.super-done{display:grid;justify-items:center;gap:6px}
+
+.dishgrid>.listempty,.dishgrid-empty{grid-column:1/-1;width:100%;padding:16px 8px 4px}
+
+.dishgrid.is-empty{grid-template-columns:minmax(0,280px);justify-content:center}
+
+/* ===================== CASA v7.3: pinned tab bar + sharper uploads ===================== */
+html,body,#app{min-height:100%;min-height:100dvh;min-height:-webkit-fill-available}
+.nav{position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;width:100%!important;max-width:none;margin:0!important;transform:none!important;padding-bottom:max(10px,var(--safe-bottom,env(safe-area-inset-bottom,0px)))!important;z-index:20}
+/* Only hide the nav when a field is focused and the visual viewport has actually shrunk (true keyboard). */
+.photoview{position:fixed;inset:0;z-index:50;background:rgba(14,20,10,.92);display:grid;place-items:center;padding:max(16px,var(--safe-top,0px)) 16px max(20px,var(--safe-bottom,0px));}
+.photoview-inner{width:min(100%,720px);display:grid;gap:12px;justify-items:center}
+.photoview-inner img{display:block;width:100%;height:auto;max-height:78dvh;object-fit:contain;border-radius:14px;background:#111;image-rendering:auto}
+.photoview-cap{color:#f6eeb8;font-weight:700;margin:0;text-align:center}
+.photoview-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.dishhero>.dishphoto,.dishimg>.dishphoto,.mealart>img.dishphoto,.li-photo,.profilephoto,.photopick.has img,.addbar-photo img{image-rendering:auto;-ms-interpolation-mode:bicubic}
+
+/* photo storage placeholders */
+.photowait{display:grid;place-items:center;background:rgba(47,74,30,.1);position:relative;overflow:hidden}
+.photowait::after{content:'';width:22px;height:22px;border:2px solid rgba(139,90,43,.25);border-top-color:var(--pit,#8b5a2b);border-radius:50%;animation:phspin .7s linear infinite}
+@keyframes phspin{to{transform:rotate(360deg)}}
+.dishhero>.photowait,.dishimg>.photowait{width:100%;height:100%;aspect-ratio:inherit}
+.photopick.has .photowait{width:100%;height:100%;min-height:160px;border-radius:18px}
+.li-photo.photowait,.photowait.li-photo{width:44px;height:44px;border-radius:10px;flex:none}
+.avatar.photowait,.photowait.avatar{width:40px;height:40px;border-radius:50%}
+.photoview-wait{width:min(100%,720px);height:min(50dvh,360px);border-radius:14px;background:#111}

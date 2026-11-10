@@ -40,8 +40,169 @@ window.CASA_MAX_MEMBERS=MAX_MEMBERS;
 let lastId=0;window.newId=()=>{const r=new Uint16Array(1);crypto.getRandomValues(r);lastId=Math.max(lastId+1,Date.now()*1000+(r[0]%1000));return lastId};
 window.whoName=w=>{if(!w||w==='ביחד')return w==='ביחד'?'ביחד':w;if(C.active){const m=C.members.find(x=>x.slot===w);if(m){if(m.user_id===C.user?.id&&C.profilePending?.display_name!=null)return C.profilePending.display_name;return m.display_name||w}if(data.profiles?.bySlot?.[w]?.name)return data.profiles.bySlot[w].name}if(w===LEGACY_ME)return data.profiles?.roei?.name||w;if(w===LEGACY_PARTNER)return data.profiles?.maya?.name||w;return w};
 
+
+/* ---------- photos (private storage bucket) ---------- */
+const PHOTO_BUCKET='photos';
+const PHOTO_URL_CACHE='casa-photo-urls-v1';
+const PHOTO_TTL=7*24*60*60;
+const urlMem={};
+let urlDisk=null;
+let migrateTimer=null;
+const pendingSigns={};
+C.localPhotos=C.localPhotos||{};
+function loadUrlDisk(){if(urlDisk)return urlDisk;try{urlDisk=JSON.parse(localStorage.getItem(PHOTO_URL_CACHE)||'{}')}catch{urlDisk={}}return urlDisk}
+function saveUrlDisk(){try{localStorage.setItem(PHOTO_URL_CACHE,JSON.stringify(urlDisk||{}))}catch{}}
+function isDataUrl(p){return typeof p==='string'&&p.startsWith('data:')}
+function photoPath(p){
+  if(!p)return '';
+  if(typeof p==='object')return p.path||'';
+  if(typeof p!=='string')return '';
+  if(p.startsWith('data:')||p.startsWith('blob:')||p.startsWith('http'))return '';
+  if(p.startsWith('{')){try{const o=JSON.parse(p);return o&&o.path||''}catch{return ''}}
+  if(/^[0-9a-fA-F-]{36}\//.test(p))return p;
+  return '';
+}
+function parseAvatar(a){
+  if(!a)return null;
+  if(typeof a==='object')return a.path?a:null;
+  if(typeof a!=='string')return null;
+  if(a.startsWith('data:')||a.startsWith('blob:')||a.startsWith('http'))return a;
+  if(a.startsWith('{')){try{const o=JSON.parse(a);return o&&o.path?o:null}catch{return null}}
+  if(photoPath(a))return {path:a};
+  return null;
+}
+function avatarStore(p){
+  if(!p||isDataUrl(p))return null;
+  const path=photoPath(p);if(!path)return typeof p==='string'&&p.startsWith('{')?p:null;
+  const o=typeof p==='object'?p:{path};
+  return JSON.stringify({path:o.path,w:o.w||0,h:o.h||0});
+}
+function stripLocalPhotos(el){
+  if(!el||typeof el!=='object'||Array.isArray(el))return el;
+  if(isDataUrl(el.photo)){const c={...el};delete c.photo;return c}
+  return el;
+}
+C.isDataUrl=isDataUrl;
+C.photoPath=photoPath;
+C.isPhotoRef=p=>!!photoPath(p);
+C.parseAvatar=parseAvatar;
+C.hasPhoto=p=>!!(isDataUrl(p)||(typeof p==='string'&&(p.startsWith('blob:')||p.startsWith('http')))||photoPath(p));
+C.peekPhotoUrl=p=>{
+  if(isDataUrl(p)||(typeof p==='string'&&(p.startsWith('blob:')||p.startsWith('http'))))return p;
+  const path=photoPath(p);if(!path)return '';
+  const hit=urlMem[path]||loadUrlDisk()[path];
+  if(hit&&hit.url&&hit.exp>Date.now()+60000){urlMem[path]=hit;return hit.url}
+  return '';
+};
+async function signPhoto(path){
+  if(!sb||!path)return '';
+  const cached=C.peekPhotoUrl({path});if(cached)return cached;
+  const{data,error}=await sb.storage.from(PHOTO_BUCKET).createSignedUrl(path,PHOTO_TTL);
+  if(error||!data?.signedUrl){console.warn('CASA photo url',error);return ''}
+  const rec={url:data.signedUrl,exp:Date.now()+PHOTO_TTL*1000-60000};
+  urlMem[path]=rec;loadUrlDisk()[path]=rec;saveUrlDisk();
+  return rec.url;
+}
+C.resolvePhoto=p=>{
+  if(isDataUrl(p)||(typeof p==='string'&&(p.startsWith('blob:')||p.startsWith('http'))))return Promise.resolve(p);
+  const path=photoPath(p);if(!path)return Promise.resolve('');
+  const hit=C.peekPhotoUrl({path});if(hit)return Promise.resolve(hit);
+  return pendingSigns[path]||(pendingSigns[path]=signPhoto(path).finally(()=>{delete pendingSigns[path]}));
+};
+C.photoTag=(photo,cls,alt,extra='')=>{
+  const path=photoPath(photo);
+  const url=path?C.peekPhotoUrl({path}):((isDataUrl(photo)||(typeof photo==='string'&&(photo.startsWith('blob:')||photo.startsWith('http'))))?photo:'');
+  const clsN=(cls||'').trim();
+  if(url)return `<img class="${clsN}" src="${url}" alt="${esc(alt||'')}" loading="lazy"${path?` data-photo-path="${esc(path)}"`:''}${extra}>`;
+  if(path)return `<span class="photowait ${clsN}" data-photo-path="${esc(path)}" role="img" aria-label="${esc(alt||'טוענים תמונה')}"${extra}></span>`;
+  return '';
+};
+C.bindPhotos=()=>{
+  document.querySelectorAll('[data-photo-path]').forEach(el=>{
+    const path=el.getAttribute('data-photo-path');
+    C.resolvePhoto({path}).then(url=>{
+      if(!url||el.getAttribute('data-photo-path')!==path||!el.isConnected)return;
+      if(el.tagName==='IMG'){if(el.getAttribute('src')!==url)el.src=url;return}
+      const img=document.createElement('img');
+      img.className=el.className.replace(/\bphotowait\b/g,'').trim();
+      img.src=url;img.alt=el.getAttribute('aria-label')||'';img.loading='lazy';
+      img.setAttribute('data-photo-path',path);
+      el.replaceWith(img);
+    });
+  });
+};
+function dataUrlToBlob(u){
+  const i=u.indexOf(',');
+  const raw=atob(u.slice(i+1));
+  const arr=new Uint8Array(raw.length);
+  for(let k=0;k<raw.length;k++)arr[k]=raw.charCodeAt(k);
+  return new Blob([arr],{type:'image/jpeg'});
+}
+function photoDims(u){return new Promise(res=>{const im=new Image();im.onload=()=>res({w:im.naturalWidth,h:im.naturalHeight});im.onerror=()=>res({w:0,h:0});im.src=u})}
+C.rememberLocalPhoto=(section,id,dataUrl)=>{
+  C.localPhotos=C.localPhotos||{};
+  const k=section==='profile'?'profile':(section+SEP+id);
+  if(dataUrl)C.localPhotos[k]=dataUrl;else delete C.localPhotos[k];
+  persist();
+};
+function applyLocalPhotos(d){
+  const lp=C.localPhotos||{};
+  for(const s of ['menu','shopping'])for(const el of d[s]||[]){
+    const k=s+SEP+itemId(el);
+    if(lp[k]&&!photoPath(el.photo))el.photo=lp[k];
+  }
+  if(d.profiles?.roei&&lp.profile&&!photoPath(d.profiles.roei.photo))d.profiles.roei.photo=lp.profile;
+}
+C.uploadPhoto=async dataUrl=>{
+  if(!C.active||!C.hh||!sb)return dataUrl;
+  if(!isDataUrl(dataUrl))throw new Error('no-photo');
+  const blob=dataUrlToBlob(dataUrl);
+  const id=(crypto.randomUUID&&crypto.randomUUID())||('xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,ch=>{const r=Math.random()*16|0;return (ch==='x'?r:(r&0x3|0x8)).toString(16)}));
+  const path=`${C.hh.id}/${id}.jpg`;
+  const{error}=await sb.storage.from(PHOTO_BUCKET).upload(path,blob,{contentType:'image/jpeg',upsert:false,cacheControl:'31536000'});
+  if(error)throw error;
+  const d=await photoDims(dataUrl);
+  const rec={path,w:d.w,h:d.h};
+  C.resolvePhoto(rec).catch(()=>{});
+  return rec;
+};
+C.removePhoto=async p=>{
+  const path=photoPath(p)||(typeof p==='string'&&!isDataUrl(p)?p:'');
+  if(!C.active||!sb||!path)return;
+  try{const{error}=await sb.storage.from(PHOTO_BUCKET).remove([path]);if(error)throw error}catch(e){console.warn('CASA photo delete',e)}
+};
+async function migrateLocalPhotos(){
+  if(!C.active||!data||!sb)return;
+  let changed=false;
+  const tryItem=async(section,el)=>{
+    if(!el||!isDataUrl(el.photo))return;
+    const raw=el.photo;
+    try{
+      const rec=await C.uploadPhoto(raw);
+      el.photo=rec;
+      C.rememberLocalPhoto(section,itemId(el),null);
+      changed=true;
+    }catch(e){console.warn('CASA photo migrate',e);C.rememberLocalPhoto(section,itemId(el),raw)}
+  };
+  for(const m of data.menu||[])await tryItem('menu',m);
+  for(const t of data.shopping||[])await tryItem('shopping',t);
+  const me=data.profiles?.roei;
+  if(me&&isDataUrl(me.photo)){
+    const raw=me.photo;
+    try{
+      const rec=await C.uploadPhoto(raw);
+      me.photo=rec;
+      C.rememberLocalPhoto('profile',null,null);
+      changed=true;
+    }catch(e){console.warn('CASA avatar migrate',e);C.rememberLocalPhoto('profile',null,raw)}
+  }
+  if(changed){if(typeof save==='function')save();C.bindPhotos()}
+}
+function scheduleMigrate(){clearTimeout(migrateTimer);migrateTimer=setTimeout(()=>{migrateLocalPhotos().catch(e=>console.warn('CASA photo migrate',e))},400)}
+C.migratePhotos=migrateLocalPhotos;
+
 /* ---------- cache ---------- */
-function persist(){if(!C.active||!C.user||!C.hh)return;try{localStorage.setItem(CACHE+C.user.id,JSON.stringify({hh:C.hh,members:C.members,base:C.base,pending:C.pending,profilePending:C.profilePending,housePending:C.housePending}));localStorage.setItem(LAST_UID,C.user.id)}catch(e){console.warn('CASA cache',e)}}
+function persist(){if(!C.active||!C.user||!C.hh)return;try{localStorage.setItem(CACHE+C.user.id,JSON.stringify({hh:C.hh,members:C.members,base:C.base,pending:C.pending,profilePending:C.profilePending,housePending:C.housePending,localPhotos:C.localPhotos||{}}));localStorage.setItem(LAST_UID,C.user.id)}catch(e){console.warn('CASA cache',e)}}
 function loadCache(uid){try{return JSON.parse(localStorage.getItem(CACHE+uid)||'null')}catch{return null}}
 
 /* ---------- model ---------- */
@@ -54,23 +215,24 @@ function materialize(){
   for(const s in tmp)d[s]=tmp[s].sort((a,b)=>a[0]-b[0]||(a[1]<b[1]?-1:a[1]>b[1]?1:0)).map(x=>x[2]);
   if(d.v2Tasks===undefined)d.v2Tasks=true;if(d.artV3===undefined)d.artV3=true;if(!d.freq)d.freq={};
   const meName=C.profilePending?.display_name??(C.me?.display_name||nameFromEmail(C.user?.email)||'אני');
-  const mePhoto=C.profilePending?C.profilePending.avatar:(C.me?.avatar||null);
+  const mePhoto=parseAvatar(C.profilePending?C.profilePending.avatar:(C.me?.avatar||null));
   const bySlot={};
   for(const m of C.members){
     const isMe=m.user_id===C.user?.id;
-    bySlot[m.slot]={name:isMe?meName:(m.display_name||'חבר/ה'),photo:isMe?mePhoto:(m.avatar||null),user_id:m.user_id};
+    bySlot[m.slot]={name:isMe?meName:(m.display_name||'חבר/ה'),photo:isMe?mePhoto:parseAvatar(m.avatar||null),user_id:m.user_id};
   }
   if(C.me&&!bySlot[C.me.slot])bySlot[C.me.slot]={name:meName,photo:mePhoto,user_id:C.user?.id};
   const others=C.members.filter(m=>m.user_id!==C.user?.id);
   d.profiles={roei:{name:meName,photo:mePhoto},
-              maya:{name:others[0]?.display_name||'חבר/ה',photo:others[0]?.avatar||null},
+              maya:{name:others[0]?.display_name||'חבר/ה',photo:parseAvatar(others[0]?.avatar||null)},
               bySlot,meSlot:C.me?.slot||'A'};
   d.houseName=C.hh?.name;
+  applyLocalPhotos(d);
   data=d;
 }
 function entries(){
   const out={};
-  for(const s of ARR)(data[s]||[]).forEach(el=>{const i=itemId(el);out[s+SEP+i]={s,i,v:stable(mapWho(s,el,whoOut))}});
+  for(const s of ARR)(data[s]||[]).forEach(el=>{const i=itemId(el);out[s+SEP+i]={s,i,v:stable(stripLocalPhotos(mapWho(s,el,whoOut)))}});
   for(const k of Object.keys(data)){if(ARR.includes(k)||k==='profiles'||k==='houseName'||data[k]===undefined)continue;out['_root'+SEP+k]={s:'_root',i:k,v:stable(data[k])}}
   return out;
 }
@@ -85,7 +247,18 @@ C.onSave=()=>{
   const cur=entries(),v=view();let changed=0;
   for(const k in cur){const e=v[k];if(!e||e.d||e.v!==cur[k].v){const c=cur[k];c.p=e&&!e.d?e.p:posFor(c.s,c.i,v);c.d=false;C.pending[k]=c;v[k]=c;changed++}}
   for(const k in v){if(!cur[k]&&!v[k].d){C.pending[k]={...v[k],v:'{}',d:true};changed++}}
-  const r=data.profiles?.roei;if(r&&C.me&&(r.name!==C.me.display_name||(r.photo||null)!==(C.me.avatar||null))){C.profilePending={display_name:String(r.name||'').slice(0,40),avatar:r.photo||null};changed++}
+  const r=data.profiles?.roei;
+  if(r&&C.me){
+    const name=String(r.name||'').slice(0,40);
+    const av=avatarStore(r.photo);
+    const nameChanged=name!==(C.me.display_name||'');
+    const photoChanged=!!av&&av!==(C.me.avatar||null);
+    if(isDataUrl(r.photo)){C.rememberLocalPhoto('profile',null,r.photo);scheduleMigrate()}
+    if(nameChanged||photoChanged){
+      const pp={display_name:name,avatar:photoChanged?av:(C.profilePending?.avatar??C.me.avatar??null)};
+      C.profilePending=pp;changed++;
+    }
+  }
   if(data.houseName!=null&&C.hh&&String(data.houseName)!==String(C.hh.name||'')){C.housePending=String(data.houseName).trim().slice(0,80)||C.hh.name;changed++}
   if(changed){persist();scheduleFlush(150)}
   return true;
@@ -165,11 +338,12 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 /* ---------- enter / leave ---------- */
 async function enterCloud(hh,{fromCache}={}){
   C.hh=hh;C.active=true;
-  if(!fromCache){C.base={};C.pending={};C.members=[];C.profilePending=null;C.housePending=null}
+  if(!fromCache){C.base={};C.pending={};C.members=[];C.profilePending=null;C.housePending=null;C.localPhotos={}}
   if(!C.me)C.me=C.members.find(x=>x.user_id===C.user.id)||null;
   materialize();
   try{await fetchAll();persist()}catch(e){console.warn('CASA fetch',e);if(!fromCache)throw e}
   materialize();sb.realtime.setAuth((await sb.auth.getSession()).data.session?.access_token);subscribe();flush();
+  migrateLocalPhotos().catch(e=>console.warn('CASA photo migrate',e));
 }
 async function findHousehold(){
   const{data:m,error}=await sb.from('household_members').select('household_id,slot,display_name,avatar,households(id,name)').eq('user_id',C.user.id).maybeSingle();
@@ -177,7 +351,7 @@ async function findHousehold(){
 }
 function leaveCloud(){
   if(C.channel){sb.removeChannel(C.channel);C.channel=null}
-  C.active=false;C.hh=null;C.members=[];C.me=null;C.base={};C.pending={};C.profilePending=null;C.housePending=null;C.invite=null;
+  C.active=false;C.hh=null;C.members=[];C.me=null;C.base={};C.pending={};C.profilePending=null;C.housePending=null;C.localPhotos={};C.invite=null;
   try{data=JSON.parse(localStorage.getItem(DEMO_KEY))||structuredClone(initial)}catch{data=structuredClone(initial)}
 }
 async function afterSignIn(){
@@ -198,11 +372,11 @@ C.boot=async()=>{
   if(inv&&/^[0-9a-f-]{36}$/i.test(inv))localStorage.setItem(INVITE_KEY,inv);
   if(inv){url.searchParams.delete('invite');history.replaceState(null,'',url.pathname+url.search+url.hash)}
   const hashErr=new URLSearchParams(location.hash.slice(1)).get('error_description');
-  if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js?v=1794313904').catch(()=>{});
+  if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js?v=1794345100').catch(()=>{});
   if(!sb){page=localStorage.getItem(INVITE_KEY)?'welcome':'welcome';return render()}
   // instant open from cache
   const lastUid=localStorage.getItem(LAST_UID),cache=lastUid&&loadCache(lastUid);
-  if(cache?.hh){C.user={id:lastUid};Object.assign(C,{hh:cache.hh,members:cache.members||[],base:cache.base||{},pending:cache.pending||{},profilePending:cache.profilePending||null,housePending:cache.housePending??null});C.me=C.members.find(m=>m.user_id===lastUid)||null;C.active=true;materialize();page='home';render()}
+  if(cache?.hh){C.user={id:lastUid};Object.assign(C,{hh:cache.hh,members:cache.members||[],base:cache.base||{},pending:cache.pending||{},profilePending:cache.profilePending||null,housePending:cache.housePending??null,localPhotos:cache.localPhotos||{}});C.me=C.members.find(m=>m.user_id===lastUid)||null;C.active=true;materialize();page='home';render()}
   else{page=localStorage.getItem(INVITE_KEY)?'join':'welcome';render()}
   const{data:{session}}=await sb.auth.getSession();
   if(hashErr){history.replaceState(null,'',location.pathname);toast('הקישור מהמייל לא תקף יותר. אפשר לבקש קוד חדש.')}
@@ -282,12 +456,12 @@ C.settings=()=>{
   const pend=Object.keys(C.pending).length+(C.profilePending?1:0)+(C.housePending!=null?1:0);
   const status=!navigator.onLine||C.status==='offline'?`אין חיבור · ${pend} שינויים ממתינים`:pend?'מסנכרן…':'הכול מסונכרן';
   const full=C.members.length>=MAX_MEMBERS;
-  const bigAv=me.photo?`<img class="avatar profilephoto prof-av" src="${me.photo}" alt="">`:`<span class="avatar initials prof-av" aria-hidden="true">${H((me.name||'?').charAt(0))}</span>`;
+  const bigAv=me.photo&&C.photoTag(me.photo,'avatar profilephoto prof-av',me.name||'')||`<span class="avatar initials prof-av" aria-hidden="true">${H((me.name||'?').charAt(0))}</span>`;
   const memberRows=C.members.slice().sort((a,b)=>a.slot<b.slot?-1:1).map(m=>{
     const isMe=m.user_id===C.user.id;
     const name=isMe?(C.profilePending?.display_name??(m.display_name||me.name)):(m.display_name||'חבר/ה');
-    const photo=isMe?(C.profilePending?C.profilePending.avatar:m.avatar):(m.avatar||null);
-    const av=photo?`<img class="avatar profilephoto member-slot-${m.slot}" src="${photo}" alt="${H(name)}">`:`<span class="avatar initials member-slot-${m.slot}" role="img" aria-label="${H(name)}">${H((name||'?').charAt(0))}</span>`;
+    const photo=isMe?me.photo:parseAvatar(m.avatar||null);
+    const av=(photo&&C.photoTag(photo,`avatar profilephoto member-slot-${m.slot}`,name))||`<span class="avatar initials member-slot-${m.slot}" role="img" aria-label="${H(name)}">${H((name||'?').charAt(0))}</span>`;
     return `<div class="memberrow">${av}<span>${H(name)}${isMe?' · את/ה':''}</span></div>`;
   }).join('');
   const inviteTools=C.invite?`<p class="sub invite-sub">כשחבר/ה לידך — סורקים את הקוד. מרחוק — שולחים את הקישור.</p><img class="qr" id="invite-qr" src="${qrSrc(inviteLink())}" alt="QR להצטרפות לבית"><div class="link" id="invite-link">${H(inviteLink())}</div><div class="invite-actions"><button class="primary" id="share-invite">שיתוף הקישור</button><button class="secondary" id="copy-invite-cloud">העתקה</button></div><button class="quiet" id="renew-invite" style="margin-top:10px">יצירת קישור חדש (הישן יבוטל)</button><div class="footnote">הקישור פתוח עד ${new Date(C.invite.expires_at).toLocaleDateString('he-IL',{timeZone:'Europe/Prague'})} או עד ביטול.</div>`
@@ -320,7 +494,7 @@ C.bind=()=>{
       err.textContent=/already_in_household/.test(m)?'החשבון הזה כבר שייך לבית אחר עם נתונים. אפשר להתנתק ולהיכנס עם מייל אחר.':/household_full/.test(m)?'בבית הזה כבר יש שני אנשים.':/expired|used|revoked|invalid/.test(m)?'ההזמנה כבר לא בתוקף. בקשו קישור חדש.':'לא הצלחנו להצטרף. נסו שוב.';busy(btn,false)}};
   const di=$q('#drop-invite');if(di)di.onclick=async()=>{localStorage.removeItem(INVITE_KEY);C.inviteInfo=null;if(!C.user)return go('welcome');if(C.pendingHH){const hh=C.pendingHH;C.pendingHH=null;await enterCloud(hh);return go('home')}go('setup')};
   const so=$q('#signout-setup');if(so)so.onclick=()=>C.signOut();
-  if(!C.active)return;
+  if(!C.active){C.bindPhotos();return}
   if(page==='settings'){
     const openMenu=$q('#open-photo-menu'),menu=$q('#photo-menu'),pick=$q('#photo-pick'),cancel=$q('#photo-cancel'),file=$q('#profile-photo');
     const showMenu=on=>{if(!menu)return;menu.hidden=!on;if(on)menu.querySelector('button')?.focus()};
@@ -342,5 +516,6 @@ C.bind=()=>{
     const dm=$q('#dismiss-migrate');if(dm)dm.onclick=()=>{localStorage.setItem('casa-migrate-dismissed:'+C.hh.id,'1');render()};
     const sgo=$q('#sign-out');if(sgo)sgo.onclick=()=>C.signOut();
   }
+  C.bindPhotos();
 };
 })();
