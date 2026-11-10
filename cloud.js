@@ -372,7 +372,7 @@ C.boot=async()=>{
   if(inv&&/^[0-9a-f-]{36}$/i.test(inv))localStorage.setItem(INVITE_KEY,inv);
   if(inv){url.searchParams.delete('invite');history.replaceState(null,'',url.pathname+url.search+url.hash)}
   const hashErr=new URLSearchParams(location.hash.slice(1)).get('error_description');
-  if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js?v=1794352800').catch(()=>{});
+  if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('sw.js?v=1794354600').catch(()=>{});
   if(!sb){page=localStorage.getItem(INVITE_KEY)?'welcome':'welcome';return render()}
   // instant open from cache
   const lastUid=localStorage.getItem(LAST_UID),cache=lastUid&&loadCache(lastUid);

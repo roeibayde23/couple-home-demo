@@ -1471,3 +1471,112 @@ body.kb-open .addbar{top:0;z-index:9;box-shadow:0 10px 24px rgba(0,0,0,.28)}
 .super-progress-row strong{color:#fff9dc !important}
 .super-progress-row span{color:#e6edc6 !important}
 
+/* ===================== CASA v7.7: FILEY-style document scroll + fixed tab bar =====================
+   v7.6 locked #app to position:fixed + height:100dvh/--app-h (and in standalone could
+   set --app-h to screen.height). That made the shell taller than the visible iOS
+   webview, so the absolutely positioned nav sat below the screen edge and the
+   labels (היום/קניות/תפריט/הוצאות) were clipped. FILEY, which already works on
+   the same iPhone, uses a normal scrolling document and a position:fixed; bottom:0
+   tab bar with padding-bottom: env(safe-area-inset-bottom). Port that pattern. */
+:root{
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --pad-left: calc(var(--safe-left) + 14px);
+  --pad-right: calc(var(--safe-right) + 14px);
+  --header-pad-top: calc(max(var(--safe-top), 12px) + 8px);
+  --nav-body: 56px;
+  --nav-height: calc(var(--nav-body) + var(--safe-bottom));
+}
+html, body{
+  position:static !important;
+  inset:auto !important;
+  width:100%;
+  max-width:100%;
+  height:auto !important;
+  min-height:100%;
+  overflow:auto !important;
+  overflow-x:hidden !important;
+  overscroll-behavior-y:none;
+  background:var(--skin-deep, #2a3d18);
+}
+#app{
+  position:static !important;
+  inset:auto !important;
+  top:auto !important;
+  left:auto !important;
+  right:auto !important;
+  bottom:auto !important;
+  width:100%;
+  max-width:none;
+  height:auto !important;
+  min-height:100dvh;
+  overflow:visible !important;
+  overflow-x:hidden !important;
+  display:block !important;
+  box-sizing:border-box;
+}
+#app > main.shell,
+#app > .shell{
+  position:relative;
+  flex:none !important;
+  min-height:0;
+  min-width:0;
+  width:100%;
+  max-width:100%;
+  overflow:visible !important;
+  overflow-x:hidden !important;
+  padding-left:var(--pad-left) !important;
+  padding-right:var(--pad-right) !important;
+  padding-bottom:calc(var(--nav-body) + var(--safe-bottom) + 16px) !important;
+  box-sizing:border-box;
+}
+body:not(.has-nav) #app > main.shell,
+body:not(.has-nav) #app > .shell,
+body.has-superbar #app > main.shell,
+body.has-superbar #app > .shell{
+  padding-bottom:calc(16px + var(--safe-bottom)) !important;
+}
+#app > main.shell.supershell,
+.shell.supershell{
+  padding-top:var(--header-pad-top) !important;
+  padding-left:var(--pad-left) !important;
+  padding-right:var(--pad-right) !important;
+  padding-bottom:calc(16px + var(--safe-bottom)) !important;
+}
+
+/* FILEY tabbar: fixed to the viewport bottom; safe-area is padding UNDER the labels. */
+#app > .nav,
+body.has-nav .nav,
+.nav{
+  position:fixed !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  top:auto !important;
+  width:100% !important;
+  max-width:none !important;
+  height:auto !important;
+  min-height:0 !important;
+  margin:0 !important;
+  transform:none !important;
+  padding-top:0 !important;
+  padding-bottom:var(--safe-bottom) !important;
+  padding-left:max(4px, var(--safe-left)) !important;
+  padding-right:max(4px, var(--safe-right)) !important;
+  box-sizing:border-box !important;
+  z-index:20;
+  display:flex;
+  align-items:stretch;
+}
+#app > .nav button,
+body.has-nav .nav button,
+.nav button{
+  height:var(--nav-body) !important;
+  min-height:var(--nav-body) !important;
+  box-sizing:border-box;
+}
+body.kb-open .nav{display:none}
+body.kb-open #app > main.shell,
+body.kb-open #app > .shell{padding-bottom:calc(16px + var(--kb, 0px)) !important}

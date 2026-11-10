@@ -385,31 +385,12 @@ function confirmSheet(text,yes,onYes){const s=openSheet(`<h3>${esc(text)}</h3><d
 
 /* ---------- keyboard / visual viewport ---------- */
 function typingFocus(){const ae=document.activeElement;if(!ae)return false;const t=ae.tagName;if(t!=='INPUT'&&t!=='TEXTAREA'&&t!=='SELECT')return false;const typ=ae.type||'';return !ae.readOnly&&!ae.disabled&&!/^(button|checkbox|radio|file|submit|reset|hidden|range|color)$/.test(typ)}
-function pinNav(){const n=document.querySelector('.nav');if(!n)return;n.style.position='absolute';n.style.left='0';n.style.right='0';n.style.bottom='0';n.style.top='auto';n.style.transform='none';n.style.margin='0';n.style.width='100%'}
-function scrollRoot(){return document.querySelector('#app > main')||document.scrollingElement||document.documentElement}
-function syncAppFrame(){
-  const root=document.documentElement;
-  const vv=window.visualViewport;
-  const inner=window.innerHeight||0;
-  const vis=vv?Math.round(vv.height+vv.offsetTop):0;
-  const client=root.clientHeight||0;
-  let h=Math.max(inner,vis,client);
-  try{
-    const stand=window.navigator.standalone===true||window.matchMedia('(display-mode: standalone)').matches;
-    if(stand&&window.screen){
-      const sh=Math.max(screen.height||0,screen.availHeight||0);
-      if(sh>h+24&&sh-h<=180)h=sh;
-    }
-  }catch{}
-  if(h>0)root.style.setProperty('--app-h',h+'px');
-}
-function resetScroll(){const sc=scrollRoot();if(sc){sc.scrollTop=0;sc.scrollLeft=0}window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;if(!typingFocus()){document.body.classList.remove('kb-open');document.documentElement.style.setProperty('--kb','0px')}syncAppFrame();pinNav()}
-function vvUpdate(){syncAppFrame();const vv=window.visualViewport;const typing=typingFocus();const covered=vv?Math.max(0,Math.round((window.innerHeight||0)-vv.height-vv.offsetTop)):0;const open=typing&&covered>120;const r=document.documentElement.style;r.setProperty('--kb',(open?covered:0)+'px');if(vv)r.setProperty('--vvh',Math.round(vv.height)+'px');document.body.classList.toggle('kb-open',open);if(!open)pinNav()}
+function pinNav(){const n=document.querySelector('.nav');if(!n)return;['position','left','right','bottom','top','height','width','margin','transform','paddingBottom'].forEach(k=>n.style[k]='');n.style.position='fixed';n.style.left='0';n.style.right='0';n.style.bottom='0';n.style.top='auto';n.style.height='';n.style.transform='none';n.style.margin='0';n.style.width='100%'}
+function scrollRoot(){return document.scrollingElement||document.documentElement}
+function resetScroll(){const sc=scrollRoot();if(sc){sc.scrollTop=0;sc.scrollLeft=0}window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;if(!typingFocus()){document.body.classList.remove('kb-open');document.documentElement.style.setProperty('--kb','0px')}pinNav()}
+function vvUpdate(){const vv=window.visualViewport;const typing=typingFocus();const covered=vv?Math.max(0,Math.round((window.innerHeight||0)-vv.height-vv.offsetTop)):0;const open=typing&&covered>120;const r=document.documentElement.style;r.setProperty('--kb',(open?covered:0)+'px');if(vv)r.setProperty('--vvh',Math.round(vv.height)+'px');document.body.classList.toggle('kb-open',open);if(!open)pinNav()}
 if(window.visualViewport){visualViewport.addEventListener('resize',vvUpdate);visualViewport.addEventListener('scroll',vvUpdate)}
-window.addEventListener('resize',syncAppFrame);
-window.addEventListener('orientationchange',()=>setTimeout(syncAppFrame,50));
 document.addEventListener('focusin',vvUpdate);document.addEventListener('focusout',()=>setTimeout(vvUpdate,0));
-syncAppFrame();
 function keepVisible(el){if(!el)return;const run=()=>{const sc=scrollRoot();const vv=window.visualViewport;const r=el.getBoundingClientRect();const top=vv?vv.offsetTop:0;const bottom=vv?vv.height+vv.offsetTop:window.innerHeight;const dy=r.bottom>bottom-12?(r.bottom-bottom+16):r.top<top+8?(r.top-top-16):0;if(!dy)return;if(sc)sc.scrollTop+=dy;else window.scrollBy(0,dy)};setTimeout(run,60);setTimeout(run,380)}
 
 /* ---------- supermarket session ---------- */
@@ -513,7 +494,7 @@ function settings(){if(CASA_CLOUD.active)return CASA_CLOUD.settings();const me=d
 function go(p){if(p!==page){closeSheet();closePhotoView();if(p!=='shopping'){lastAddedId=null;pendingPhoto=null}if(p==='meal-edit'){const ex=editingMealId?getMenu().find(m=>m.id===editingMealId):null;dishDraftPhoto=ex?.photo||null}if(page==='supermarket')releaseWake();if(p!=='meals')menuEdit=false}page=p;render();resetScroll();requestAnimationFrame(()=>{resetScroll();requestAnimationFrame(resetScroll)})}
 function render(){ensureV2();ensureShopping();ensureExpenses();const views={welcome,login,create,invite,accept,home,shopping,supermarket,tasks,meals,meal,'meal-edit':mealEdit,expenses,settings,...CASA_CLOUD.views};const bare=['welcome','login','create','invite','accept','settings','meal-edit','tasks','supermarket',...CASA_CLOUD.bare];const cloud=CASA_CLOUD.active,authPage=CASA_CLOUD.authPages.includes(page)||(!cloud&&['welcome','login'].includes(page));const chromeless=page==='supermarket';const showNav=!bare.includes(page);const bar=authPage||page==='welcome'?'':superBar();
 app.innerHTML=`<main class="shell${authPage||page==='welcome'?' authshell':''}${page==='welcome'?' welcome-shell':''}${chromeless?' supershell':''}">${page==='welcome'||chromeless?'':(authPage?CASA_CLOUD.simpleHeader():appHeader())}${chromeless?'':(cloud?CASA_CLOUD.banner():(authPage?'':'<div class="demo">הדגמה מקומית · כל התוכן נתוני דוגמה · ללא חשבונות או סנכרון ענן</div>'))}${(views[page]||welcome)()}${!bare.includes(page)&&!cloud?'<div class="footnote">כל השינויים נשמרים במכשיר הזה בלבד. <button class="quiet" id="reset">איפוס נתוני הדוגמה</button></div>':''}</main>${showNav?nav():''}${bar}`;
-document.body.classList.toggle('has-superbar',!!bar);document.body.classList.toggle('has-nav',showNav);bind();CASA_CLOUD.bind();bindV7();syncAppFrame();pinNav();if(CASA_CLOUD.bindPhotos)CASA_CLOUD.bindPhotos()}
+document.body.classList.toggle('has-superbar',!!bar);document.body.classList.toggle('has-nav',showNav);bind();CASA_CLOUD.bind();bindV7();pinNav();if(CASA_CLOUD.bindPhotos)CASA_CLOUD.bindPhotos()}
 function bindV7(){
   const nb=document.querySelector('.nav'),sbar=$('#superbar');if(sbar&&nb)sbar.style.setProperty('--navh',nb.offsetHeight+'px');
   if(page==='supermarket')holdWake();
