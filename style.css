@@ -1140,3 +1140,334 @@ body.has-nav .superbar{bottom:calc(var(--nav-height) + 8px) !important}
   .pagehead.shophead h1,.shophead h1{font-size:20px}
   .menuhead-actions .pillbtn{padding:0 10px;font-size:12px}
 }
+
+/* ===================== CASA v7.6: fill standalone viewport, side inset, restaurant menu, notebook list ===================== */
+:root{
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --pad-left: calc(var(--safe-left) + 14px);
+  --pad-right: calc(var(--safe-right) + 14px);
+  --header-pad-top: calc(max(var(--safe-top), 12px) + 8px);
+  --nav-body: 56px;
+  --nav-height: calc(var(--nav-body) + var(--safe-bottom));
+}
+/* v7.5 put height:-webkit-fill-available last, which on a standalone iOS PWA
+   (viewport-fit=cover + black-translucent) is the short "inner" viewport, so
+   #app stopped ~110px above the physical screen and left a dark-green band.
+   Fill the cover viewport with a fixed shell; do not use -webkit-fill-available. */
+html,body{
+  margin:0;
+  width:100%;
+  max-width:100%;
+  height:100%;
+  overflow:hidden;
+  overflow-x:hidden;
+  overscroll-behavior:none;
+  background:var(--skin-deep, #2a3d18);
+}
+html{
+  height:100%;
+  height:100dvh;
+}
+#app{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:auto;
+  width:auto;
+  max-width:none;
+  height:100%;
+  height:100dvh;
+  height:var(--app-h, 100dvh);
+  min-height:0;
+  overflow:hidden;
+  overflow-x:hidden;
+  display:flex;
+  flex-direction:column;
+  box-sizing:border-box;
+}
+#app > main.shell,
+#app > .shell{
+  flex:1 1 auto;
+  min-height:0;
+  min-width:0;
+  width:100%;
+  max-width:100%;
+  overflow:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding-left:var(--pad-left) !important;
+  padding-right:var(--pad-right) !important;
+  padding-bottom:calc(var(--nav-height) + 16px) !important;
+  box-sizing:border-box;
+}
+body:not(.has-nav) #app > main.shell,
+body:not(.has-nav) #app > .shell,
+body.has-superbar #app > main.shell,
+body.has-superbar #app > .shell{
+  padding-bottom:calc(16px + var(--safe-bottom)) !important;
+}
+/* Pin the nav to the bottom of #app (absolute, so it follows the real shell
+   height). One safe-bottom only, as padding inside the bar. */
+#app > .nav,
+body.has-nav .nav{
+  position:absolute !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:0 !important;
+  top:auto !important;
+  width:100% !important;
+  max-width:none !important;
+  height:var(--nav-height) !important;
+  min-height:var(--nav-height);
+  margin:0 !important;
+  transform:none !important;
+  padding-top:0 !important;
+  padding-bottom:var(--safe-bottom) !important;
+  padding-left:max(4px, var(--safe-left)) !important;
+  padding-right:max(4px, var(--safe-right)) !important;
+  box-sizing:border-box !important;
+  z-index:20;
+  display:flex;
+  align-items:stretch;
+  flex:none;
+}
+#app > .nav button,
+body.has-nav .nav button{
+  height:var(--nav-body);
+  min-height:var(--nav-body);
+  box-sizing:border-box;
+}
+body.kb-open .nav{display:none}
+body.kb-open #app > main.shell,
+body.kb-open #app > .shell{padding-bottom:calc(16px + var(--kb, 0px)) !important}
+
+/* Side clipping: keep the shell inset and clip only horizontal overflow. */
+.card,.listpanel,.menubook,.addbar,.calendarcard,.justadded,.exp-card,.modeswitch,.segswitch,.homegrid,.stack,.grid{
+  max-width:100%;
+  box-sizing:border-box;
+}
+
+/* Home: no repeated date under the calendar — only the events / empty line. */
+.daypanel{margin-top:10px;padding-top:10px;border-top:1px solid rgba(246,238,184,.18)}
+.daypanel .cardhead{display:none}
+.dayempty{padding:8px 2px 4px;text-align:right}
+.dayempty p{margin:0;font-size:13px;color:#d7e2b8!important}
+
+/* Restaurant menu: single column, sectioned like a printed menu. */
+.menubook{
+  position:relative;
+  overflow:hidden;
+  max-width:100%;
+  margin:0 auto 12px;
+  background:var(--flesh)!important;
+  border:1px solid rgba(139,90,43,.25)!important;
+  border-radius:18px;
+  padding:16px 16px 20px;
+  box-shadow:0 10px 24px rgba(0,0,0,.16)!important;
+  color:var(--ink)!important;
+}
+.menubook.is-edit{padding-bottom:12px}
+.menusection{padding:4px 0 12px;border-bottom:1px dashed rgba(47,74,30,.22)}
+.menusection:last-of-type{border-bottom:0;padding-bottom:0}
+.menusection-h{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  margin:8px 0 10px;
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:.14em;
+  color:var(--skin,#2f4a1e)!important;
+  text-align:center;
+}
+.menusection-h span{flex:none}
+.menusection-h::before,
+.menusection-h::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:rgba(139,90,43,.4);
+  max-width:72px;
+}
+.menuline{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:100%;
+  padding:9px 0;
+  text-align:right;
+  background:none;
+  color:inherit;
+  border-bottom:1px solid rgba(47,74,30,.1);
+}
+.menusection .menuline:last-child{border-bottom:0}
+.menuline-thumb{
+  width:42px;
+  height:42px;
+  flex:none;
+  border-radius:10px;
+  overflow:hidden;
+  background:#efe6a8;
+}
+.menuline-thumb img,
+.menuline-thumb .dishphoto,
+.menuline-thumb .dishph{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  max-width:none;
+}
+.menuline-thumb .dishph{display:grid;place-items:center;font-size:0;height:100%}
+.menuline-thumb .dishph span{display:none}
+.menuline-thumb .dishph svg{width:20px;height:20px;color:var(--skin)}
+.menuline-body{flex:1;min-width:0}
+.menuline-row{display:flex;align-items:baseline;gap:8px;width:100%}
+.menuline-name{
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:16px;
+  font-weight:700;
+  color:var(--skin,#2f4a1e)!important;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:62%;
+  letter-spacing:0;
+}
+.menuline-lead{
+  flex:1;
+  border-bottom:1px dotted rgba(139,90,43,.5);
+  transform:translateY(-5px);
+  min-width:12px;
+  height:0;
+}
+.menuline-meta{
+  font-size:12px;
+  color:var(--pit,#88613d)!important;
+  white-space:nowrap;
+  flex:none;
+  font-variant-numeric:tabular-nums;
+}
+.menuline-note{
+  display:block;
+  margin-top:2px;
+  font-size:12px;
+  color:var(--muted)!important;
+  font-style:italic;
+  text-align:right;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.menu-empty{text-align:center;padding:8px 0;font-size:13px;color:var(--muted)!important}
+.menubook .editrow{border-bottom:1px solid rgba(47,74,30,.1);padding:6px 0}
+@media(max-width:400px){
+  .menubook{padding:14px 12px 16px;border-radius:16px}
+  .menusection-h{font-size:18px;letter-spacing:.1em}
+  .menuline-name{font-size:15px}
+}
+
+/* Lined-notebook shopping list */
+.listpanel.notebook,
+.notebook.listpanel{
+  background-color:var(--flesh);
+  background-image:repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 35px,
+    rgba(47,74,30,.14) 35px,
+    rgba(47,74,30,.14) 36px
+  );
+  padding:2px 10px 6px;
+  border-radius:14px;
+  overflow:hidden;
+}
+.notebook .listcat,
+.listpanel.notebook .listcat{display:none}
+.notebook .li,
+.listpanel.notebook .li{
+  min-height:36px;
+  padding:6px 0;
+  border-bottom:1px solid rgba(47,74,30,.14);
+  gap:8px;
+  flex-wrap:nowrap;
+  background:transparent;
+}
+.notebook .li.open{flex-wrap:wrap}
+.li-ico{
+  width:26px;
+  height:26px;
+  flex:none;
+  border-radius:6px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  color:var(--pit,#88613d);
+  background:transparent;
+}
+.li-ico .ic,
+.li-ico svg{width:16px;height:16px;display:block}
+.li-photo-mini,
+.li-ico img,
+.li-ico .li-photo-mini{
+  width:26px;
+  height:26px;
+  border-radius:6px;
+  object-fit:cover;
+  display:block;
+  max-width:none;
+}
+.notebook .li-main{padding:2px 0;min-width:0}
+.notebook .li-main .productname{font-size:15px;font-weight:500}
+.notebook .li-qty{font-size:12px;color:var(--pit);flex:none;white-space:nowrap}
+.notebook .li-tag{font-size:10px;padding:1px 6px;border-radius:8px}
+.notebook .li-more{width:28px;height:28px;flex:none;color:var(--muted)}
+
+/* Add bar stays above the keyboard; sticky so it is not scrolled away while typing. */
+.addbar{position:sticky;top:0;z-index:8}
+body.kb-open .addbar{top:0;z-index:9;box-shadow:0 10px 24px rgba(0,0,0,.28)}
+
+/* Supermarket: same list rhythm, no category headings, strike only here. */
+.super-list.notebook{display:flex;flex-direction:column;gap:0}
+.super-list.notebook .super-cat{display:none}
+.super-list.notebook .super-row{
+  min-height:48px;
+  margin:0;
+  padding:8px 4px;
+  border-radius:0;
+  border-bottom:1px solid rgba(246,238,184,.2);
+  background:transparent;
+  box-shadow:none;
+  color:#fff9dc;
+  gap:10px;
+}
+.super-list.notebook .super-row .li-photo,
+.super-list.notebook .super-row .li-art{width:28px;height:28px;border-radius:6px}
+.super-list.notebook .super-row .li-art svg{width:26px;height:24px}
+.super-list.notebook .super-name{font-size:16px;font-weight:600}
+.super-list.notebook .super-qty{font-size:13px}
+.super-list.notebook .super-check{width:26px;height:26px}
+.super-list.notebook .super-row.done{background:transparent;color:#dfe6c2}
+.super-list.notebook .super-row.done .super-name{text-decoration:line-through;opacity:.75}
+
+@media(max-width:700px){
+  .shell{padding-left:var(--pad-left);padding-right:var(--pad-right)}
+}
+
+/* Supermarket is chromeless — it still needs the cover safe-area, including the sides. */
+#app > main.shell.supershell,
+.shell.supershell{
+  padding-top:var(--header-pad-top) !important;
+  padding-left:var(--pad-left) !important;
+  padding-right:var(--pad-right) !important;
+}
+.supershell .super-top{top:0}
+.super-progress-row strong{color:#fff9dc !important}
+.super-progress-row span{color:#e6edc6 !important}
+
