@@ -1729,6 +1729,8 @@ body.kb-open #app > .shell{padding-bottom:calc(16px + var(--kb, 0px)) !important
 .item-glyph-emo[data-tone="baby"]{background:#f3e6d8}
 .item-glyph-emo[data-tone="pet"]{background:#e7dfd0}
 .item-glyph-emo[data-tone="bag"]{background:#efe6a8}
+.item-glyph-emo[data-tone="cart"]{background:#e7ecd8}
+.item-glyph-emo[data-tone="avo"]{background:#e7ecd8}
 /* emoji sits in the circle: the emo span IS the circle */
 .li-glyph .item-glyph-emo{background:transparent}
 .li-glyph:has(.item-glyph-emo[data-tone="fruit"]){background:#f5e0b8}
@@ -1746,6 +1748,8 @@ body.kb-open #app > .shell{padding-bottom:calc(16px + var(--kb, 0px)) !important
 .li-glyph:has(.item-glyph-emo[data-tone="baby"]){background:#f3e6d8}
 .li-glyph:has(.item-glyph-emo[data-tone="pet"]){background:#e7dfd0}
 .li-glyph:has(.item-glyph-emo[data-tone="bag"]){background:#efe6a8}
+.li-glyph:has(.item-glyph-emo[data-tone="cart"]){background:#e7ecd8}
+.li-glyph:has(.item-glyph-emo[data-tone="avo"]){background:#e7ecd8}
 
 .listpanel .li-main,
 .shoplist .li-main{
@@ -1834,3 +1838,35 @@ body.kb-open #app > .shell{padding-bottom:calc(16px + var(--kb, 0px)) !important
 .super-list .super-row.done{background:transparent;color:#dfe6c2}
 .super-list .super-row.done .super-name{text-decoration:line-through;opacity:.75}
 .super-list .super-row.done .li-glyph{opacity:.7}
+
+/* v7.9: category headers, row delete, sort menu, avocado fallback */
+.item-glyph-avo{width:16px;height:20px;display:block;margin:0 auto}
+.shopcat-ico .item-glyph-avo{width:12px;height:15px}
+.shophead-tools{display:flex;align-items:center;gap:8px;flex:none}
+.shophead,.pagehead,.shophead-tools{overflow:visible}
+.sortwrap{position:relative;flex:none;z-index:40}
+.sort-btn{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;color:#e6edc6;background:rgba(0,0,0,.28);border:1px solid rgba(246,238,184,.16);padding:0}
+.sort-btn svg{width:18px;height:18px}
+.sort-btn[aria-expanded="true"]{background:var(--flesh);color:var(--skin-deep)}
+.sort-menu{position:fixed;min-width:11.5rem;padding:4px;border-radius:14px;background:var(--flesh);color:var(--ink);box-shadow:0 8px 24px rgba(0,0,0,.28);border:1px solid rgba(47,74,30,.1);display:flex;flex-direction:column;gap:2px;z-index:80}
+.sort-menu button{display:block;width:100%;text-align:right;padding:9px 12px;border-radius:10px;font-size:14px;font-weight:700;color:var(--ink);background:transparent;border:0}
+.sort-menu button.on{background:rgba(134,175,55,.22);color:var(--skin-deep)}
+.shopcat{display:flex;align-items:center;gap:8px;padding:10px 6px 4px;font-size:11px;font-weight:800;color:var(--pit,#88613d);letter-spacing:.01em}
+.listpanel .shopcat:first-child{padding-top:6px}
+.shopcat-ico{width:20px;height:20px;flex:none;border-radius:50%;display:grid;place-items:center;font-size:11px;line-height:1;overflow:hidden}
+.shopcat-name{line-height:1.2}
+.li-del{width:32px;height:32px;flex:none;display:grid;place-items:center;color:var(--muted);opacity:.7;margin-inline-start:auto;border-radius:10px;background:transparent;border:0;padding:0}
+.li-del svg{width:16px;height:16px}
+.li-del:hover,.li-del:active{opacity:1;color:#9b3f26;background:rgba(155,63,38,.1)}
+.toast-undo{display:flex;align-items:center;gap:14px}
+.toast-undo-btn{background:var(--flesh);color:var(--skin-deep);font-weight:800;border:0;border-radius:9px;padding:6px 12px;font-size:13px}
+.super-top{display:flex !important;grid-template-columns:none !important;align-items:center;justify-content:space-between;gap:8px}
+.super-list .shopcat{color:#e6edc6;padding:12px 6px 6px}
+.super-list .shopcat:first-child{padding-top:4px}
+.super-list .super-row{display:flex;align-items:center;gap:2px;padding-inline-end:0}
+.super-list .super-main{flex:1;min-width:0;display:flex;align-items:center;gap:10px;height:48px;background:none;border:0;color:inherit;text-align:right;padding:0 6px}
+.super-list .li-del{color:#e6edc6;opacity:.55}
+.super-list .li-del:hover,.super-list .li-del:active{opacity:1;color:#f6eeb8;background:rgba(246,238,184,.12)}
+
+.toast{z-index:20}
+body.has-superbar .toast{bottom:calc(var(--nav-height, 72px) + 76px) !important}
