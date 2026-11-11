@@ -18,7 +18,8 @@ const roomArt=`<svg viewBox="0 0 400 450" role="img" aria-label="איור מקו
 const initial={shopping:[{id:1,name:'עגבניות שרי',category:'ירקות ופירות',done:false},{id:2,name:'חלב שיבולת שועל',category:'מקרר',done:false},{id:3,name:'לחם מחמצת',category:'מאפים',done:true},{id:4,name:'אבוקדו',category:'ירקות ופירות',qty:2,done:false},{id:5,name:'ביצים',category:'מקרר וביצים',done:false},{id:6,name:'קפה',category:'מזווה',done:false}],tasks:[{id:1,title:'להשקות את העציצים',who:'רועי',when:'היום',done:false},{id:2,title:'להפעיל מכונת כביסה',who:'מאיה',when:'היום',done:false},{id:3,title:'לבחור ארוחה לערב',who:'ביחד',when:'בלי לחץ',done:false}]};let data;try{data=JSON.parse(localStorage.getItem('couple-demo-v1'))||structuredClone(initial)}catch{data=structuredClone(initial)};const save=()=>{if(window.CASA_CLOUD&&CASA_CLOUD.active)return CASA_CLOUD.onSave();try{localStorage.setItem('couple-demo-v1',JSON.stringify(data));return true}catch{toast('האחסון המקומי מלא. השינוי לא נשמר; נסו להסיר תמונה.');return false}};const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let token=sessionStorage.getItem('demo-invite')||crypto.randomUUID();sessionStorage.setItem('demo-invite',token);let revoked=sessionStorage.getItem('demo-revoked')==='true',accepted=sessionStorage.getItem('demo-accepted')==='true';const inviteUrl=()=>{const url=new URL('./',location.href);url.searchParams.set('invite',token);return url.href};const qrData=()=>`data:image/svg+xml;charset=utf-8,${encodeURIComponent(LocalQR.toSVG(inviteUrl()))}`;
 function toast(text){$('.toast')?.remove();const d=document.createElement('div');d.className='toast';d.setAttribute('role','status');d.textContent=text;document.body.append(d);clearTimeout(toastTimer);toastTimer=setTimeout(()=>d.remove(),3500)}
-function appHeader(){const me=myMember();const house=String((CASA_CLOUD.active?(CASA_CLOUD.housePending??(CASA_CLOUD.hh?.name||data.houseName)):data.houseName)||'').trim()||'הבית שלנו';return `<header class="top"><div class="side left">${avatarForMember(me)}<button class="gear" data-go="settings" aria-label="הגדרות">${gearIcon}</button></div><button class="brand centerbrand" data-go="home" aria-label="CASA בית">${casaLogo}<span class="brandtext"><span class="greeting">${esc(house)}</span></span></button><div class="side right"><button class="iconbtn tasksbtn" data-go="tasks" aria-label="מטלות">${icon('tasks')}</button></div></header>`}
+function houseOrn(){return `<svg class="hn-avo" viewBox="0 0 12 14" width="11" height="13" aria-hidden="true"><path d="M6 1.2c1.4 0 2.4 1.5 3.4 3.2C11.2 7.2 11 11.2 6 12.6 1 11.2.8 7.2 2.6 4.4 3.6 2.7 4.6 1.2 6 1.2z" fill="#F1DD81"/><ellipse cx="6" cy="8.1" rx="1.7" ry="2" fill="#8B5A2B"/></svg>`}
+function appHeader(){const me=myMember();const house=String((CASA_CLOUD.active?(CASA_CLOUD.housePending??(CASA_CLOUD.hh?.name||data.houseName)):data.houseName)||'').trim()||'הבית שלנו';return `<header class="top"><div class="side left">${avatarForMember(me)}<button class="gear" data-go="settings" aria-label="הגדרות">${gearIcon}</button></div><button class="brand centerbrand" data-go="home" aria-label="CASA בית">${casaLogo}<span class="brandtext"><span class="greeting housename" title="${esc(house)}"><span class="hn-orn" aria-hidden="true">${houseOrn()}</span><span class="hn-text">${esc(house)}</span><span class="hn-orn" aria-hidden="true">${houseOrn()}</span></span></span></button><div class="side right"><button class="iconbtn tasksbtn" data-go="tasks" aria-label="מטלות">${icon('tasks')}</button></div></header>`}
 
 function nav(){return `<nav class="nav" aria-label="ניווט ראשי">${[['home','home','היום'],['shopping','shop','קניות'],['meals','meal','תפריט'],['expenses','money','הוצאות']].map(([p,i,t])=>`<button data-go="${p}" class="${page===p||(p==='meals'&&(page==='meal'||page==='meal-edit'))?'active':''}">${icon(i)}${t}</button>`).join('')}</nav>`}
 
@@ -405,13 +406,13 @@ function releaseWake(){try{wakeLock?.release()}catch{}wakeLock=null}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&page==='supermarket')holdWake()});
 setInterval(()=>{const t=document.getElementById('superbar-time');if(t)t.textContent=superElapsedLabel()},30000);
 function itemThumb(t,big){const pic=t.photo?photoTag(t.photo,'li-photo',t.name||''):'';return pic||`<span class="li-art">${productArt(t.art)}</span>`}
-function superRow(t){return `<button type="button" class="super-row ${t.done?'done':''}" data-super="${t.id}" aria-pressed="${t.done}" aria-label="${t.done?'ביטול סימון: ':'סימון: '}${esc(t.name)}"><span class="super-check" aria-hidden="true">${t.done?svg('check'):''}</span>${itemThumb(t,true)}<span class="super-name">${esc(t.name)}</span><span class="super-qty">${t.qty>1||t.unit!=='יח׳'?`${t.qty} ${esc(t.unit)}`:''}</span></button>`}
+function superRow(t){return `<button type="button" class="super-row ${t.done?'done':''}" data-super="${t.id}" aria-pressed="${t.done}" aria-label="${t.done?'ביטול סימון: ':'סימון: '}${esc(t.name)}"><span class="super-check" aria-hidden="true">${t.done?svg('check'):''}</span>${t.photo?`<span class="li-glyph has-photo" data-super-photo="${t.id}">${itemGlyph(t)}</span>`:`<span class="li-glyph" aria-hidden="true">${itemGlyph(t)}</span>`}<span class="super-name">${esc(t.name)}</span>${t.qty>1||t.unit!=='יח׳'?`<span class="super-qty">${t.qty} ${esc(t.unit)}</span>`:''}</button>`}
 function supermarket(){if(!superSession())try{localStorage.setItem(SUPER_KEY,JSON.stringify({startedAt:Date.now()}))}catch{}
   const open=data.shopping.filter(t=>!t.done),marked=data.shopping.filter(t=>t.done),total=data.shopping.length,pct=total?Math.round(marked.length/total*100):0;
   return `<div class="supermode"><div class="super-top">${shopSwitch('super')}<button type="button" class="super-end" id="super-end">סיום</button></div>
 <div class="super-progress"><div class="super-progress-row"><strong>${open.length?`נשארו ${open.length}`:'הכול סומן!'}</strong><span>${marked.length?`${marked.length} מתוך ${total} סומנו`:`${total} ברשימה`} · ${superElapsedLabel()}</span></div><div class="progressbar" role="progressbar" aria-label="התקדמות הקנייה" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><span style="width:${pct}%"></span></div></div>
 ${!total?`<p class="super-done">${avoDeco('done')}<span>הרשימה ריקה.</span></p>`:!open.length?`<p class="super-done">${avoDeco('done')}<span>סימנתם הכול. אפשר ללחוץ "סיום".</span></p>`:''}
-<div class="super-list notebook">${data.shopping.map(superRow).join('')}</div>
+<div class="super-list shoplist">${data.shopping.map(superRow).join('')}</div>
 <p class="super-hint">נוגעים בפריט כדי לסמן אותו בקו. הוא נשאר במקום. אפשר לצאת מהמסך — הקנייה ממשיכה בפס למטה.</p></div>`}
 
 /* ---------- home ---------- */
@@ -426,14 +427,91 @@ function openEventSheet(date){const s=openSheet(`<h3>${svg('cal')} אירוע ח
   s.querySelector('#ev-save').onclick=saveEv;s.querySelector('#ev-cancel').onclick=closeSheet;s.querySelector('#ev-note').onkeydown=e=>{if(e.key==='Enter')saveEv()};s.querySelector('#ev-title').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('#ev-time').focus()}};setTimeout(()=>s.querySelector('#ev-title')?.focus(),60)}
 
 /* ---------- shopping ---------- */
-function shopRows(items){return items.map(t=>`<div class="li ${editingCategory===t.id?'open':''}" data-product="${t.id}"><button type="button" class="li-ico" data-item-photo="${t.id}" aria-label="${t.photo?'צפייה בתמונה':'הוספת תמונה'} · ${esc(t.name)}">${t.photo?photoTag(t.photo,'li-photo-mini',t.name||''):svg('camera')}</button><button type="button" class="li-main" data-edit-category="${t.id}" aria-label="${esc(t.name)} · עריכה"><span class="productname">${esc(t.name)}</span>${t.qty>1||t.unit!=='יח׳'?`<span class="li-qty">${t.qty} ${esc(t.unit)}</span>`:''}${t.fromMeal?'<span class="li-tag">מהתפריט</span>':''}</button><button class="li-more" data-edit-category="${t.id}" aria-label="עוד אפשרויות · ${esc(t.name)}" aria-expanded="${editingCategory===t.id}"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="10" cy="4.5" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="10" cy="15.5" r="1.5"/></svg></button>${editingCategory===t.id?`<div class="li-editor"><div class="quantity mini" aria-label="כמות ${esc(t.name)}"><button data-qty="${t.id}" data-step="-1" aria-label="הפחתת כמות ${esc(t.name)}" ${t.qty<=1?'disabled':''}>−</button><output>${t.qty}</output><button data-qty="${t.id}" data-step="1" aria-label="הגדלת כמות ${esc(t.name)}" ${t.qty>=99?'disabled':''}>+</button></div><select data-item-unit="${t.id}" aria-label="יחידה ${esc(t.name)}">${['יח׳','חבילות','בקבוקים','ק״ג'].map(u=>`<option ${t.unit===u?'selected':''}>${u}</option>`).join('')}</select><select data-item-category="${t.id}" aria-label="קטגוריה ${esc(t.name)}">${allShoppingCategories().map(c=>`<option ${t.category===c?'selected':''}>${esc(c)}</option>`).join('')}</select>${t.photo?`<button type="button" class="quiet" data-remove-photo="${t.id}">הסרת תמונה</button>`:''}<button type="button" class="quiet dangerish" data-del-item="${t.id}">מחיקה</button></div>`:''}</div>`).join('')}
+
+const SHOP_GLYPHS=[
+  // specific multi-word first
+  [/דפי\s*אורז|נייר\s*אורז/,'🫓','pantry'],
+  [/סבון\s*גוף|סבון\s*רחצה/,'🧼','hygiene'],
+  [/סבון\s*כלים/,'🍽️','clean'],
+  [/סבון\s*כביסה|אבקת\s*כביסה|מרכך\s*כביסה|כביסה/,'🧺','clean'],
+  [/נייר\s*טואלט|נייר\s*טישו/,'🧻','clean'],
+  [/משחת\s*שיניים/,'🦷','hygiene'],
+  [/מברשת\s*שיניים/,'🪥','hygiene'],
+  [/תפוח\s*אדמ/,'🥔','veg'],
+  [/פלפל\s*שחור/,'🌶️','spice'],
+  [/חלב\s*שקדים|חלב\s*סויה|חלב\s*שיבולת|חלב\s*קוקוס|משקה\s*שיבולת/,'🥛','dairy'],
+  [/שיבולת\s*שועל|קוואקר/,'🌾','pantry'],
+  [/חול\s*לחתול/,'🐈','pet'],
+  [/אוכל\s*לכלב|מזון\s*לכלב/,'🐶','pet'],
+  [/אוכל\s*לחתול|מזון\s*לחתול/,'🐱','pet'],
+  [/נייר\s*אפייה|נייר\s*כסף|ניילון|שקיות\s*אשפה|שקיות/,'🛍️','bag'],
+  [/רסק\s*עגבנ|עגבניות\s*מרוסק/,'🍅','veg'],
+  // fruit
+  [/בננ/,'🍌','fruit'],[/תפוז|קלמנטינ|מנדרינ/,'🍊','fruit'],[/תפוח/,'🍎','fruit'],
+  [/תות/,'🍓','fruit'],[/ענב/,'🍇','fruit'],[/אבטיח/,'🍉','fruit'],[/מלון/,'🍈','fruit'],
+  [/אגס/,'🍐','fruit'],[/אפרסק|נקטרינ/,'🍑','fruit'],[/מנגו/,'🥭','fruit'],[/אננס/,'🍍','fruit'],
+  [/קיווי/,'🥝','fruit'],[/לימון|ליים/,'🍋','fruit'],[/אבוקד/,'🥑','fruit'],[/דובדבן|דובדבנ/,'🍒','fruit'],
+  [/קוקוס/,'🥥','fruit'],[/אוכמני|חמוצי/,'🫐','fruit'],[/רימון/,'🍎','fruit'],[/תמר|תאנה|שזיף|אפרסמון/,'🍇','fruit'],
+  // veg
+  [/עגבנ|שרי\b/,'🍅','veg'],[/מלפפ/,'🥒','veg'],[/גזר/,'🥕','veg'],[/בצל/,'🧅','veg'],[/שום/,'🧄','veg'],
+  [/פלפל/,'🫑','veg'],[/חסה|כרוב|רוקט|עלים ירוקים/,'🥬','veg'],[/ברוקול/,'🥦','veg'],[/כרובי/,'🥦','veg'],
+  [/חציל/,'🍆','veg'],[/תירס/,'🌽','veg'],[/פטרי/,'🍄','veg'],[/דלעת|קישו/,'🎃','veg'],[/סלק|בטט/,'🍠','veg'],
+  [/זית/,'🫒','veg'],[/תרד|סלרי|צנונ|אפונה|שעועית ירוקה|במיה/,'🥬','veg'],
+  // dairy & eggs
+  [/ביצ/,'🥚','dairy'],[/חלב/,'🥛','dairy'],[/גבינ|מוצרל|פרמזן|צדר|פטה|בולגרית/,'🧀','dairy'],
+  [/יוגורט|יוגור/,'🥛','dairy'],[/חמאה|ממרח/,'🧈','dairy'],[/שמנת|קצפת|לבנה|קוטג/,'🥛','dairy'],
+  // bread & bakery
+  [/טורטי/,'🫓','bread'],[/לחם|מחמצת/,'🍞','bread'],[/בגט|לחמני/,'🥖','bread'],[/פית|פיתה/,'🫓','bread'],
+  [/חלה/,'🍞','bread'],[/קרואסון/,'🥐','bread'],[/בייגל/,'🥯','bread'],[/עוגי/,'🍪','bread'],
+  [/עוג|מאפה|בורקס|וופל|מאפין/,'🧁','bread'],
+  // meat & fish
+  [/עוף|חזה עוף|שוקיים|כנפיים/,'🍗','meat'],[/הודו/,'🦃','meat'],[/בקר|בשר|טחון|אנטריקוט|סטייק/,'🥩','meat'],
+  [/נקניק|נקניקי|המבורגר/,'🌭','meat'],[/שניצל|קבב/,'🍖','meat'],[/סלמון|טונה|דג|פילה|סרדין|דגי/,'🐟','meat'],
+  // pantry / grains
+  [/אורז/,'🍚','pantry'],[/פסטה|ספגטי|נודלס|לזני/,'🍝','pantry'],[/קמח/,'🌾','pantry'],
+  [/סוכר/,'🍬','pantry'],[/מלח/,'🧂','pantry'],[/שמן|זית כתית/,'🫒','pantry'],
+  [/דבש/,'🍯','pantry'],[/טחינה|חומוס/,'🥣','pantry'],[/עדש|שעוע יבש|גרגירי|חומוס יבש|קינואה|בורגול|קוסקוס|גריסים/,'🌾','pantry'],
+  [/קטשופ|מיונז|חרדל|חומץ|סויה\b/,'🫙','pantry'],[/ריבה|ממרח שוקולד/,'🍯','pantry'],
+  [/שימור|קופס[הא] שימורים|רסק/,'🥫','pantry'],
+  // spices
+  [/תבלין|כמון|פפריק|כורכום|קינמון|זעתר|אורגנו|בהרט|צ'ילי|צ׳ילי|פפריקה/,'🌶️','spice'],
+  // drinks
+  [/קפה/,'☕','drink'],[/תה\b|תה /,'🍵','drink'],[/מים/,'💧','drink'],[/מיץ/,'🧃','drink'],
+  [/סודה|קולה|משקה|פאנטה|ספרייט/,'🥤','drink'],[/יין/,'🍷','drink'],[/ביר/,'🍺','drink'],
+  // snacks
+  [/שוקולד|קקאו/,'🍫','snack'],[/גליד/,'🍦','snack'],[/פופקורן/,'🍿','snack'],
+  [/אגוז|שקד|קשיו|פיסטוק|בוטנ|גרעין/,'🥜','snack'],[/חטיף|במבה|ביסלי|ציפס|דבש/,'🍪','snack'],
+  [/גרנולה|דגני\s*בוקר|קורנפלקס/,'🥣','snack'],[/צימוק/,'🍇','snack'],
+  // frozen
+  [/קפוא|קפואים/,'🧊','frozen'],
+  // cleaning / hygiene
+  [/אקונומי|ניקוי|ספוג|מטהר|אקונומיקה/,'🧴','clean'],[/סבון/,'🧼','hygiene'],
+  [/שמפו|מרכך שיער/,'🧴','hygiene'],[/דאודורנט/,'🧴','hygiene'],[/קרם|תחליב|לושן/,'🧴','hygiene'],
+  [/טישו/,'🧻','clean'],
+  // baby & pets
+  [/חיתול|מגבונ|מטרנה|תינוק|סימילק/,'🍼','baby'],[/כלב/,'🐶','pet'],[/חתול/,'🐱','pet'],
+  // fallback-ish kitchen
+  [/נר\b|נרות/,'🕯️','bag']
+];
+function groceryGlyph(name){
+  const n=normalizeProduct(name||'');
+  for(const [rx,emoji,tone] of SHOP_GLYPHS){if(rx.test(n))return {emoji,tone}}
+  return {emoji:'🛍️',tone:'bag'}
+}
+function itemGlyph(t){
+  if(t&&t.photo)return photoTag(t.photo,'item-glyph-img',t.name||'');
+  const g=groceryGlyph(t&&t.name);
+  return `<span class="item-glyph-emo" data-tone="${g.tone}" aria-hidden="true">${g.emoji}</span>`;
+}
+
+function shopRows(items){return items.map(t=>`<div class="li ${editingCategory===t.id?'open':''}" data-product="${t.id}">${t.photo?`<button type="button" class="li-glyph has-photo" data-item-photo="${t.id}" aria-label="צפייה בתמונה · ${esc(t.name)}">${itemGlyph(t)}</button>`:`<span class="li-glyph" aria-hidden="true">${itemGlyph(t)}</span>`}<button type="button" class="li-main" data-edit-category="${t.id}" aria-label="${esc(t.name)} · עריכה"><span class="productname">${esc(t.name)}</span>${t.qty>1||t.unit!=='יח׳'?`<span class="li-qty">${t.qty} ${esc(t.unit)}</span>`:''}${t.fromMeal?'<span class="li-tag">מהתפריט</span>':''}</button><button class="li-more" data-edit-category="${t.id}" aria-label="עוד אפשרויות · ${esc(t.name)}" aria-expanded="${editingCategory===t.id}"><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><circle cx="10" cy="4.5" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="10" cy="15.5" r="1.5"/></svg></button>${editingCategory===t.id?`<div class="li-editor"><div class="quantity mini" aria-label="כמות ${esc(t.name)}"><button data-qty="${t.id}" data-step="-1" aria-label="הפחתת כמות ${esc(t.name)}" ${t.qty<=1?'disabled':''}>−</button><output>${t.qty}</output><button data-qty="${t.id}" data-step="1" aria-label="הגדלת כמות ${esc(t.name)}" ${t.qty>=99?'disabled':''}>+</button></div><select data-item-unit="${t.id}" aria-label="יחידה ${esc(t.name)}">${['יח׳','חבילות','בקבוקים','ק״ג'].map(u=>`<option ${t.unit===u?'selected':''}>${u}</option>`).join('')}</select><select data-item-category="${t.id}" aria-label="קטגוריה ${esc(t.name)}">${allShoppingCategories().map(c=>`<option ${t.category===c?'selected':''}>${esc(c)}</option>`).join('')}</select>${t.photo?`<button type="button" class="quiet" data-item-photo="${t.id}">צפייה / החלפת תמונה</button><button type="button" class="quiet" data-remove-photo="${t.id}">הסרת תמונה</button>`:`<button type="button" class="quiet" data-add-photo="${t.id}">הוספת תמונה</button>`}<button type="button" class="quiet dangerish" data-del-item="${t.id}">מחיקה</button></div>`:''}</div>`).join('')}
 function shopSwitch(on){return `<div class="segswitch" role="group" aria-label="מצב"><button type="button" class="${on==='list'?'on':''}" ${on==='list'?'aria-pressed="true"':'data-go="shopping" aria-pressed="false"'}>רשימה</button><button type="button" class="${on==='super'?'on':''}" ${on==='super'?'aria-pressed="true"':'id="start-super" aria-pressed="false"'}>אני בסופר</button></div>`}
 function shopping(){if(!superSession()&&data.shopping.some(t=>t.done)){data.shopping.forEach(t=>{t.done=false});save()}
 const items=data.shopping;const last=lastAddedId&&data.shopping.find(t=>t.id===lastAddedId);
 return `<div class="pagehead shophead"><div><h1 class="withicon">${avoDeco('tiny')}רשימת קניות</h1><span class="pagehead-sub">${items.length?`${items.length} ברשימה`:''}</span></div>${shopSwitch('list')}</div>
 <div class="addbar" id="addbar"><div class="quick"><button type="button" class="addbar-photo ${pendingPhoto?'has':''}" id="add-photo" aria-label="${pendingPhoto?'החלפת התמונה שתצורף':'הוסף תמונה'}">${pendingPhoto?`<img src="${pendingPhoto}" alt="">`:svg('camera')}</button><input id="quick-item" aria-label="מה להוסיף לרשימה?" placeholder="מה להוסיף?" maxlength="90" autocomplete="off" enterkeyhint="done"><button id="add-item" aria-label="הוספה לרשימה">+</button></div><p id="add-error" role="alert"></p><p id="classification-hint" class="sub"></p></div>
 ${last?`<div class="justadded" role="status">נוסף: <strong>${esc(last.name)}</strong>${last.photo?`<img src="${last.photo}" alt="">`:`<button type="button" id="justadded-photo">${svg('camera')} תמונה</button>`}<button type="button" class="justadded-x" id="justadded-close" aria-label="סגירה">${svg('close')}</button></div>`:''}
-<section class="listpanel notebook has-avo">${avoDeco('mark')}${items.length?shopRows(items):`<p class="listempty">${avoDeco('empty')}הרשימה ריקה.</p>`}</section>`}
+<section class="listpanel shoplist has-avo">${avoDeco('mark')}${items.length?shopRows(items):`<p class="listempty">${avoDeco('empty')}הרשימה ריקה.</p>`}</section>`}
 function addItem(){const input=$('#quick-item'),name=input.value.trim().replace(/\s+/g,' ');const error=$('#add-error');const fail=msg=>{if(error)error.textContent=msg;else toast(msg)};if(!name){fail('מה נוסיף? כתבו שם מוצר.');input.focus();return}const value=$('#add-qty')?.value??'1';const qty=Number(value);if(!value.trim()||!Number.isInteger(qty)||qty<1||qty>99){fail('בחרו כמות שלמה בין 1 ל־99.');return}const unit=$('#add-unit')?.value||'יח׳';const existing=data.shopping.find(t=>!t.done&&productKey(t.name)===productKey(name)&&t.unit===unit);if(existing&&existing.qty+qty>99){fail('הכמות הכוללת גדולה מ־99. אפשר לעדכן את הכמות ברשימה.');return}let item;if(existing){existing.qty+=qty;item=existing}else{const info=lookupProduct(name);item={id:newId(),name,qty,unit,category:info.category,art:info.art,shoppingV3:true,done:false};data.shopping.push(item)}if(pendingPhoto&&page==='shopping'){item.photo=pendingPhoto;pendingPhoto=null}lastAddedId=item.id;shopFilter='all';bumpFreq(existing?existing.name:name);if(!save()&&item.photo){delete item.photo;save()}render();const again=$('#quick-item');if(again){again.focus({preventScroll:true});keepVisible($('#addbar')||again)}toast(existing?'הפריט כבר ברשימה — הכמות עודכנה':'נוסף לרשימה')}
 async function attachItemPhoto(id){const url=await choosePhoto({max:1000,q:.85,limit:350*1024});if(!url)return;const t=data.shopping.find(x=>x.id===id);if(!t)return;const old=t.photo;t.photo=await storePhoto(url);if(!save()){if(old)t.photo=old;else delete t.photo;return}if(old&&old!==t.photo)dropPhoto(old);render();toast('התמונה נוספה')}
 function bindShopping(){document.querySelectorAll('[data-qty]').forEach(b=>b.onclick=()=>{const t=data.shopping.find(t=>t.id===+b.dataset.qty);t.qty=Math.max(1,Math.min(99,t.qty+Number(b.dataset.step)));save();render()});document.querySelectorAll('[data-edit-category]').forEach(b=>b.onclick=()=>{editingCategory=editingCategory===+b.dataset.editCategory?null:+b.dataset.editCategory;render()});document.querySelectorAll('[data-item-category]').forEach(s=>s.onchange=()=>{const t=data.shopping.find(t=>t.id===+s.dataset.itemCategory);t.category=s.value;editingCategory=null;shopFilter='all';save();render()});document.querySelectorAll('[data-item-unit]').forEach(x=>x.onchange=()=>{const t=data.shopping.find(t=>t.id===+x.dataset.itemUnit);t.unit=x.value;save();render()});document.querySelectorAll('[data-shop-filter]').forEach(b=>b.onclick=()=>{shopFilter=b.dataset.shopFilter;render()});if($('#toggle-bought'))$('#toggle-bought').onclick=()=>{boughtExpanded=!boughtExpanded;render()};document.querySelectorAll('[data-common]').forEach(b=>b.onclick=()=>{$('#quick-item').value=b.dataset.common;addItem()});if($('#classification-hint'))$('#quick-item').addEventListener('input',()=>{const v=$('#quick-item').value.trim();$('#add-error').textContent='';const info=lookupProduct(v);$('#classification-hint').textContent=!v?'':info.category==='כללי'?'יתווסף ל״כללי״ · אפשר לשנות קטגוריה':`קטגוריה: ${info.category}`})}
@@ -511,7 +589,8 @@ function bindV7(){
   if($('#justadded-photo'))$('#justadded-photo').onclick=()=>attachItemPhoto(lastAddedId);
   if($('#justadded-close'))$('#justadded-close').onclick=()=>{lastAddedId=null;render()};
   document.querySelectorAll('[data-item-photo]').forEach(b=>b.onclick=()=>{const t=data.shopping.find(x=>x.id===+b.dataset.itemPhoto);if(t&&t.photo)openPhotoView(t.photo,t.name,()=>attachItemPhoto(t.id));else attachItemPhoto(+b.dataset.itemPhoto)});
-  document.querySelectorAll('.super-row .li-photo').forEach(img=>{img.onclick=e=>{e.preventDefault();e.stopPropagation();const row=img.closest('[data-super]');const t=data.shopping.find(x=>x.id===+(row&&row.dataset.super));if(t&&t.photo)openPhotoView(t.photo,t.name)}})
+  document.querySelectorAll('[data-add-photo]').forEach(b=>b.onclick=()=>attachItemPhoto(+b.dataset.addPhoto));
+  document.querySelectorAll('.super-row [data-super-photo], .super-row .has-photo').forEach(el=>{el.onclick=e=>{e.preventDefault();e.stopPropagation();const t=data.shopping.find(x=>x.id===+el.dataset.superPhoto||x.id===+(el.closest('[data-super]')&&el.closest('[data-super]').dataset.super));if(t&&t.photo)openPhotoView(t.photo,t.name)}})
   document.querySelectorAll('[data-remove-photo]').forEach(b=>b.onclick=()=>{const t=data.shopping.find(x=>x.id===+b.dataset.removePhoto);if(t){const old=t.photo;delete t.photo;save();if(old)dropPhoto(old);render();toast('התמונה הוסרה')}});
   document.querySelectorAll('[data-del-item]').forEach(b=>b.onclick=()=>{const id=+b.dataset.delItem;const gone=data.shopping.find(x=>x.id===id);data.shopping=data.shopping.filter(x=>x.id!==id);editingCategory=null;if(lastAddedId===id)lastAddedId=null;save();if(gone?.photo)dropPhoto(gone.photo);render();toast('הפריט הוסר מהרשימה')});
   // supermarket

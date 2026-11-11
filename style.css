@@ -1580,3 +1580,257 @@ body.has-nav .nav button,
 body.kb-open .nav{display:none}
 body.kb-open #app > main.shell,
 body.kb-open #app > .shell{padding-bottom:calc(16px + var(--kb, 0px)) !important}
+
+/* ===================== CASA v7.8: tidy shopping rows + house name ===================== */
+@font-face{font-family:'Amatic SC';src:url('fonts/AmaticSC-Hebrew.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F}
+
+/* House name under the CASA logo — Amatic SC, buttery handwritten, small avocado ornaments */
+.centerbrand{max-width:min(260px,62vw)!important;overflow:visible!important}
+.centerbrand .housename,
+.greeting.housename{
+  display:flex!important;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  margin:6px 0 0!important;
+  padding:0!important;
+  max-width:100%;
+  font-size:0!important; /* only .hn-text paints the name */
+  font-family:inherit!important;
+  font-weight:400!important;
+  color:transparent!important;
+  letter-spacing:0!important;
+  opacity:1!important;
+  line-height:1!important;
+  background:none!important;
+  transform:none!important;
+}
+.housename .hn-text{
+  font-family:'Amatic SC',cursive!important;
+  font-weight:700!important;
+  font-size:28px!important;
+  line-height:1.1!important;
+  color:#F6EEB8!important;
+  letter-spacing:.06em!important;
+  text-shadow:0 1px 0 rgba(36,56,22,.28);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:70vw;
+}
+.housename .hn-orn{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  flex:none;
+  opacity:.85;
+}
+.housename .hn-orn:last-child{flex-direction:row-reverse}
+.housename .hn-orn::before{
+  content:"";
+  width:10px;
+  height:1px;
+  background:rgba(246,238,184,.55);
+  display:block;
+  border-radius:1px;
+}
+.housename .hn-avo,
+.brand .housename svg.hn-avo,
+.centerbrand .housename svg{
+  display:block;
+  flex:none;
+  width:11px !important;
+  height:13px !important;
+  transform:none !important;
+  filter:none;
+}
+
+/* Shopping: kill the ruled notebook; one clean divider per row */
+.listpanel.notebook,
+.notebook.listpanel,
+.listpanel.shoplist,
+.listpanel{
+  background:var(--flesh)!important;
+  background-image:none!important;
+  padding:4px 8px!important;
+  border-radius:16px;
+  overflow:hidden;
+}
+.listpanel .listcat{display:none}
+.listpanel .li,
+.listpanel.shoplist .li,
+.notebook .li{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:48px;
+  height:48px;
+  padding:0 6px;
+  margin:0;
+  border-bottom:1px solid rgba(47,74,30,.12);
+  flex-wrap:nowrap;
+  background:transparent;
+  box-sizing:border-box;
+}
+.listpanel .li:last-child,
+.listpanel.shoplist .li:last-child,
+.notebook .li:last-child{border-bottom:0}
+.listpanel .li.open,
+.listpanel.shoplist .li.open{
+  height:auto;
+  min-height:48px;
+  flex-wrap:wrap;
+  padding-bottom:8px;
+}
+.li-glyph{
+  width:28px;
+  height:28px;
+  flex:none;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  padding:0;
+  background:#efe6a8;
+  line-height:1;
+}
+.li-glyph.has-photo{cursor:pointer}
+.item-glyph-emo{
+  font-size:15px;
+  line-height:1;
+  display:grid;
+  place-items:center;
+  width:28px;
+  height:28px;
+  pointer-events:none;
+}
+.item-glyph-img,
+.li-glyph img,
+.li-glyph .item-glyph-img{
+  width:28px;
+  height:28px;
+  object-fit:cover;
+  border-radius:50%;
+  display:block;
+  max-width:none;
+}
+.item-glyph-emo[data-tone="fruit"]{background:#f5e0b8}
+.item-glyph-emo[data-tone="veg"]{background:#e4efc4}
+.item-glyph-emo[data-tone="dairy"]{background:#f7edd4}
+.item-glyph-emo[data-tone="bread"]{background:#f1dd81}
+.item-glyph-emo[data-tone="meat"]{background:#f0d4c8}
+.item-glyph-emo[data-tone="pantry"]{background:#e8e0c0}
+.item-glyph-emo[data-tone="spice"]{background:#f0d9b0}
+.item-glyph-emo[data-tone="drink"]{background:#d8e6d4}
+.item-glyph-emo[data-tone="snack"]{background:#f3e2b6}
+.item-glyph-emo[data-tone="frozen"]{background:#d8e4ee}
+.item-glyph-emo[data-tone="clean"]{background:#dce8d0}
+.item-glyph-emo[data-tone="hygiene"]{background:#e6e0f0}
+.item-glyph-emo[data-tone="baby"]{background:#f3e6d8}
+.item-glyph-emo[data-tone="pet"]{background:#e7dfd0}
+.item-glyph-emo[data-tone="bag"]{background:#efe6a8}
+/* emoji sits in the circle: the emo span IS the circle */
+.li-glyph .item-glyph-emo{background:transparent}
+.li-glyph:has(.item-glyph-emo[data-tone="fruit"]){background:#f5e0b8}
+.li-glyph:has(.item-glyph-emo[data-tone="veg"]){background:#e4efc4}
+.li-glyph:has(.item-glyph-emo[data-tone="dairy"]){background:#f7edd4}
+.li-glyph:has(.item-glyph-emo[data-tone="bread"]){background:#f1dd81}
+.li-glyph:has(.item-glyph-emo[data-tone="meat"]){background:#f0d4c8}
+.li-glyph:has(.item-glyph-emo[data-tone="pantry"]){background:#e8e0c0}
+.li-glyph:has(.item-glyph-emo[data-tone="spice"]){background:#f0d9b0}
+.li-glyph:has(.item-glyph-emo[data-tone="drink"]){background:#d8e6d4}
+.li-glyph:has(.item-glyph-emo[data-tone="snack"]){background:#f3e2b6}
+.li-glyph:has(.item-glyph-emo[data-tone="frozen"]){background:#d8e4ee}
+.li-glyph:has(.item-glyph-emo[data-tone="clean"]){background:#dce8d0}
+.li-glyph:has(.item-glyph-emo[data-tone="hygiene"]){background:#e6e0f0}
+.li-glyph:has(.item-glyph-emo[data-tone="baby"]){background:#f3e6d8}
+.li-glyph:has(.item-glyph-emo[data-tone="pet"]){background:#e7dfd0}
+.li-glyph:has(.item-glyph-emo[data-tone="bag"]){background:#efe6a8}
+
+.listpanel .li-main,
+.shoplist .li-main{
+  flex:1;
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:0;
+  background:none;
+  border:0;
+  height:48px;
+  text-align:right;
+  color:var(--ink);
+}
+.listpanel .li-main .productname,
+.shoplist .productname{
+  font-size:15px;
+  font-weight:600;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:var(--ink);
+}
+.li-qty,
+.shoplist .li-qty,
+.listpanel .li-qty{
+  font-size:11px;
+  font-weight:700;
+  color:var(--pit,#88613d);
+  background:rgba(47,74,30,.08);
+  border-radius:99px;
+  padding:2px 8px;
+  white-space:nowrap;
+  flex:none;
+}
+.listpanel .li-more,
+.shoplist .li-more{
+  width:32px;
+  height:32px;
+  flex:none;
+  color:var(--muted);
+  opacity:.7;
+  margin-inline-start:auto;
+}
+.listpanel .li-tag{font-size:10px;padding:1px 6px;border-radius:8px;flex:none}
+
+/* Supermarket: same tidy rows, checkbox + strike */
+.super-list,
+.super-list.shoplist,
+.super-list.notebook{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  background:none;
+  background-image:none!important;
+}
+.super-list .super-row,
+.super-list.shoplist .super-row,
+.super-list.notebook .super-row{
+  min-height:48px;
+  height:48px;
+  margin:0;
+  padding:0 6px;
+  border-radius:0;
+  border-bottom:1px solid rgba(246,238,184,.2);
+  background:transparent;
+  box-shadow:none;
+  color:#fff9dc;
+  gap:10px;
+  align-items:center;
+}
+.super-list .super-row:last-child,
+.super-list.shoplist .super-row:last-child{border-bottom:0}
+.super-list .super-check{width:26px;height:26px;flex:none}
+.super-list .super-name{font-size:16px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.super-list .super-qty{
+  font-size:11px;
+  font-weight:700;
+  color:var(--flesh);
+  background:rgba(246,238,184,.12);
+  border-radius:99px;
+  padding:2px 8px;
+  flex:none;
+}
+.super-list .super-row.done{background:transparent;color:#dfe6c2}
+.super-list .super-row.done .super-name{text-decoration:line-through;opacity:.75}
+.super-list .super-row.done .li-glyph{opacity:.7}
