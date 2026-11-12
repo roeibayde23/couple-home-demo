@@ -30,7 +30,7 @@ function head(title,sub,action=''){return `<div class="head"><div><h1 class="wit
 function welcome(){return `<div class="welcome welcome-a"><div class="welcome-a-logo">${casaLogo}</div><div class="welcome-a-hero" aria-hidden="true">${avocadoHero}</div><h1>הבית שלכם,<br>במקום אחד.</h1><p class="welcome-a-sub"><span class="welcome-a-line1">קניות · לו״ז · הוצאות · מטלות · ואפילו ארוחות</span><span class="welcome-a-line2">הכל מסונכרן בין כל בני הבית.</span></p><div class="welcome-a-actions"><button class="primary" id="welcome-create" data-go="login" data-intent="create">יצירת בית</button><button class="quiet welcome-a-account" data-go="login" data-intent="existing">כבר יש לי חשבון</button><button class="quiet welcome-a-demo" data-go="home">להציץ בהדגמה</button></div><p class="welcome-a-tag">לזוגות · למשפחות · לחברים</p></div>`}
 function login(){return `<div class="center"><button class="back" data-go="welcome">→ בחזרה</button><div class="card"><div class="onboardingstep">מתחילים במקום קטן ומשותף</div><h1>היי, טוב שבאתם.</h1><p>בהמשך, לכל אחד יהיה חשבון אישי. כרגע אפשר להכיר את הבית בלי להירשם ובלי למסור פרטים.</p><button class="secondary nohover" disabled>כניסה באימייל — בחיבור החשבונות בהמשך</button><button class="primary" data-go="create">כניסה להדגמה</button><div class="notice">אין כאן כניסה אמיתית, סיסמאות או חשבון ענן. הנתונים נשמרים רק בדפדפן הזה.</div></div></div>`}
 function create(){return `<div class="center"><button class="back" data-go="login">→ בחזרה</button><div class="card"><div class="onboardingstep">01 / הבית המשותף · הדגמה</div><h1>מקום קטן משותף.</h1><p>נתחיל עם בית לדוגמה, ונראה איך מצרפים חברים.</p><label for="house-name">איך נקרא לבית?</label><input id="house-name" value="${esc(data.houseName||'הבית שלנו')}" maxlength="60" style="margin-top:8px"><button class="primary" id="create-home">יצירת בית להדגמה</button><div class="footnote">השם יישמר מקומית בלבד. לא נוצר חשבון או בית בשרת.</div></div></div>`}
-function invite(){return `<div class="center"><button class="back" data-go="settings">→ בחזרה להגדרות</button><div class="card"><div class="onboardingstep">02 / מצטרפים יחד · הדגמה</div><h1>כמה טלפונים.<br>בית אחד.</h1><p>כשאתם יחד, הכי פשוט לסרוק במצלמה הרגילה של הטלפון. מרחוק אפשר לשתף קישור.</p>${revoked?'<div class="notice">קישור ההדגמה בוטל בדפדפן הזה.</div><button class="primary" id="renew">יצירת QR הדגמה חדש</button>':`<img class="qr" src="${qrData()}" alt="QR אמיתי של קישור הזמנה מקומי להדגמה"><div class="notice">הדגמה מקומית — עדיין לא מחבר בין טלפונים. ה־QR פותח את אותה הדגמה בלבד, בלי לצרף חשבון או לסנכרן מידע. אין בו פרטי חשבון.</div><div class="link">${esc(inviteUrl())}</div><button class="primary" id="copy-invite">העתקת קישור לשיתוף</button><button class="secondary" data-go="accept">תצוגת קבלת ההזמנה</button><button class="quiet" id="revoke" style="margin-top:18px">ביטול ההזמנה בהדגמה</button>`}<div class="footnote">במוצר האמיתי: כניסה אישית ואישור מפורש, קישור חד־פעמי שפג לאחר 24 שעות וניתן לביטול. האבטחה הזו עדיין לא מחוברת לשרת.</div></div></div>`}
+function invite(){return `<div class="center"><button class="back" data-go="settings">→ בחזרה להגדרות</button><div class="card"><div class="onboardingstep">02 / מצטרפים יחד · הדגמה</div><h1>כמה טלפונים.<br>בית אחד.</h1><p>כשאתם יחד, הכי פשוט לסרוק במצלמה הרגילה של הטלפון. מרחוק אפשר לשתף קישור.</p>${revoked?'<div class="notice">קישור ההדגמה בוטל בדפדפן הזה.</div><button class="primary" id="renew">יצירת QR הדגמה חדש</button>':`<div class="srow invite-srow"><span class="srow-ic">${svg('qr')}</span><span class="srow-text"><b>הזמנה לבית</b><small>הזמנת בן/בת בית — סריקה או קישור</small></span><button type="button" class="srow-btn" id="toggle-invite-qr">QR</button></div><div class="notice">הדגמה מקומית — עדיין לא מחבר בין טלפונים. ה־QR פותח את אותה הדגמה בלבד, בלי לצרף חשבון או לסנכרן מידע. אין בו פרטי חשבון.</div><div class="link">${esc(inviteUrl())}</div><button class="primary" id="copy-invite">העתקת קישור לשיתוף</button><button class="secondary" data-go="accept">תצוגת קבלת ההזמנה</button><button class="quiet" id="revoke" style="margin-top:18px">ביטול ההזמנה בהדגמה</button>`}<div class="footnote">במוצר האמיתי: כניסה אישית ואישור מפורש, קישור חד־פעמי שפג לאחר 24 שעות וניתן לביטול. האבטחה הזו עדיין לא מחוברת לשרת.</div></div></div>`}
 function accept(){return `<div class="center"><button class="back" data-go="invite">→ בחזרה להזמנה</button><div class="card"><div class="onboardingstep">תצוגה בלבד · אין התחברות בין מכשירים</div><h1>${accepted?'השלב הבא יהיה ביחד.':'הזמנה לבית לדוגמה'}</h1><p>${accepted?'אישור ההדגמה נרשם בדפדפן הזה בלבד. לא צורף אדם לבית אמיתי.':'במוצר המלא, כאן נכנסים לחשבון אישי, בודקים לאיזה בית הוזמנתם ומאשרים הצטרפות.'}</p><div class="notice">${revoked?'ההזמנה בוטלה בהדגמה.':accepted?'ההזמנה סומנה כנוצלה בהדגמה המקומית.':'בית לדוגמה · נתוני דוגמה בלבד'}</div>${!accepted&&!revoked?'<button class="primary" id="accept-demo">הדמיית אישור הצטרפות</button>':''}<button class="secondary" data-go="home">פתיחת הבית לדוגמה</button></div></div>`}
 
 
@@ -107,7 +107,7 @@ const slices=items.map((it,i)=>{const ang=it.value/total*Math.PI*2;const a2=a+an
 return `<div class="chartwrap"><svg viewBox="0 0 220 200" class="piechart" role="img" aria-label="גרף עוגה לפי קטגוריה">${slices}<circle cx="${cx}" cy="${cy}" r="${ri-2}" fill="#243816"/></svg><ul class="chartlegend pieleg">${items.map((it,i)=>`<li><span class="swatch" style="background:${colors[i%colors.length]}"></span><span>${it.icon} ${esc(it.label)}</span><strong>${it.pct}% · <span dir="ltr">${formatCZK(it.value)}</span></strong></li>`).join('')}</ul></div>`}
 
 function dates(){go('home')}
-function bind(){bindV2();bindShopping();bindCasa();bindExpenses();bindCrop();document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{if(b.dataset.intent)try{sessionStorage.setItem('casa-intent',b.dataset.intent)}catch{};go(b.dataset.go)});document.querySelectorAll('[data-shop]').forEach(b=>b.onclick=()=>toggleShopping(+b.dataset.shop));document.querySelectorAll('[data-task]').forEach(b=>b.onclick=()=>{let t=data.tasks.find(t=>t.id===+b.dataset.task);t.done=!t.done;save();render()});if($('#add-item')){$('#add-item').onclick=addItem;$('#quick-item').onkeydown=e=>{if(e.key==='Enter')addItem()}}if($('#create-home'))$('#create-home').onclick=()=>{data.houseName=$('#house-name').value.trim()||'הבית שלנו';save();go('invite')};if($('#copy-invite'))$('#copy-invite').onclick=async()=>{try{await navigator.clipboard.writeText(inviteUrl());toast('הקישור להדגמה הועתק. לא נשלחה הזמנה.')}catch{toast('ההעתקה לא זמינה כאן. אפשר להעתיק מהקישור המוצג.')}};if($('#revoke'))$('#revoke').onclick=()=>{revoked=true;sessionStorage.setItem('demo-revoked','true');render()};if($('#renew'))$('#renew').onclick=()=>{token=crypto.randomUUID();sessionStorage.setItem('demo-invite',token);revoked=false;accepted=false;sessionStorage.removeItem('demo-revoked');sessionStorage.removeItem('demo-accepted');render()};if($('#accept-demo'))$('#accept-demo').onclick=()=>{accepted=true;sessionStorage.setItem('demo-accepted','true');render()};if($('#reset'))$('#reset').onclick=()=>{data=structuredClone(initial);expenseMonth=null;expenseView='month';save();render();toast('נתוני הדוגמה אופסו')};if($('#favorite-date'))$('#favorite-date').onclick=()=>{data.favorite=!data.favorite;save();render()};if($('#ingredients'))$('#ingredients').onclick=()=>{const chosen=[...document.querySelectorAll('[name="ingredient"]:checked')].map(e=>e.value);if(!chosen.length){toast('בחרו לפחות מצרך אחד שחסר');return}const count=addIngredientNames(chosen);go('shopping');toast(count?`${count} מצרכים עודכנו ברשימה`:'המצרכים כבר ברשימה הפתוחה')}}
+function bind(){bindV2();bindShopping();bindCasa();bindExpenses();bindCrop();document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{if(b.dataset.intent)try{sessionStorage.setItem('casa-intent',b.dataset.intent)}catch{};go(b.dataset.go)});document.querySelectorAll('[data-shop]').forEach(b=>b.onclick=()=>toggleShopping(+b.dataset.shop));document.querySelectorAll('[data-task]').forEach(b=>b.onclick=()=>{let t=data.tasks.find(t=>t.id===+b.dataset.task);t.done=!t.done;save();render()});if($('#add-item')){$('#add-item').onclick=addItem;$('#quick-item').onkeydown=e=>{if(e.key==='Enter')addItem()}}if($('#create-home'))$('#create-home').onclick=()=>{data.houseName=$('#house-name').value.trim()||'הבית שלנו';save();go('invite')};if($('#copy-invite'))$('#copy-invite').onclick=async()=>{try{await navigator.clipboard.writeText(inviteUrl());toast('הקישור להדגמה הועתק. לא נשלחה הזמנה.')}catch{toast('ההעתקה לא זמינה כאן. אפשר להעתיק מהקישור המוצג.')}};if($('#revoke'))$('#revoke').onclick=()=>{revoked=true;sessionStorage.setItem('demo-revoked','true');render()};if($('#renew'))$('#renew').onclick=()=>{token=crypto.randomUUID();sessionStorage.setItem('demo-invite',token);revoked=false;accepted=false;sessionStorage.removeItem('demo-revoked');sessionStorage.removeItem('demo-accepted');render()};if($('#accept-demo'))$('#accept-demo').onclick=()=>{accepted=true;sessionStorage.setItem('demo-accepted','true');render()};if($('#reset'))$('#reset').onclick=()=>{data=structuredClone(initial);expenseMonth=null;expenseView='month';save();render();toast('נתוני הדוגמה אופסו')};if($('#favorite-date'))$('#favorite-date').onclick=()=>{data.favorite=!data.favorite;save();render()};if($('#ingredients'))$('#ingredients').onclick=()=>{const chosen=[...document.querySelectorAll('[name="ingredient"]:checked')].map(e=>e.value);if(!chosen.length){toast('בחרו לפחות מצרך אחד שחסר');return}const count=addIngredientNames(chosen);go('shopping');toast(count?`${count} מצרכים עודכנו ברשימה`:'המצרכים כבר ברשימה הפתוחה')};bindFixes();bindInviteQr();}
 
 const gearIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m9 3 1-1h4l1 3 3 1 3 3-2 3 1 3-3 3-3-1-2 3-4-1-1-3-3-1-1-4 2-2V6l3-2Z"/><circle cx="12" cy="11" r="3"/></svg>';
 function ensureV2(){if(!data.profiles)data.profiles={roei:{name:'אני',photo:null},maya:{name:'חבר/ה',photo:null}};
@@ -339,7 +339,13 @@ camera:'<path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13.5" r="3.2"/>'
 plus:'<path d="M12 5v14M5 12h14"/>',trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
 up:'<path d="m6 15 6-6 6 6"/>',down:'<path d="m6 9 6 6 6-6"/>',edit:'<path d="m4 16 10-10 4 4-10 10H4z"/>',
 close:'<path d="M6 6l12 12M18 6 6 18"/>',chev:'<path d="m15 6-6 6 6 6"/>',list:'<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/>',
-check:'<path d="m5 12 5 5 9-10"/>',clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',cal:'<rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/>'};
+check:'<path d="m5 12 5 5 9-10"/>',clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',cal:'<rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+qr:'<rect x="3.5" y="3.5" width="7" height="7" rx="1.2"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.2"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.2"/><path d="M13.5 13.5h3.2v3.2H13.5zM20.5 13.5V21H13.5M17.2 17.2H21"/>',
+users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3.2"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a3.2 3.2 0 0 1 0 6.23"/>',
+sync:'<path d="M21 12a9 9 0 0 1-15.4 6.3L4 20v-6h6"/><path d="M3 12a9 9 0 0 1 15.4-6.3L20 4v6h-6"/>',
+mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+wrench:'<path d="M14.7 6.3a4.5 4.5 0 0 0-6 6L3 18l3 3 5.7-5.7a4.5 4.5 0 0 0 6-6L16 11l-3-3z"/>'};
 const svg=(n,cls='')=>`<svg class="ic ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${v7icons[n]||icons[n]||''}</svg>`;
 const menuOrder=['breakfast','lunch','dinner','snack'];
 let menuEdit=false,menuTabInit=false,dishDraftPhoto=null,pendingPhoto=null,lastAddedId=null,wakeLock=null;
@@ -671,7 +677,126 @@ document.querySelectorAll('[data-del-exp]').forEach(b=>b.onclick=()=>{const e=da
 
 /* ---------- settings (demo; cloud version lives in cloud.js) ---------- */
 const camBadge='<span class="prof-cam" aria-hidden="true"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13.5" r="3.2"/></svg></span>';
-function settings(){if(CASA_CLOUD.active)return CASA_CLOUD.settings();const me=data.profiles.roei;const bigAv=(me.photo&&photoTag(me.photo,'avatar profilephoto prof-av',me.name||''))||`<span class="avatar initials prof-av" aria-hidden="true">${esc((me.name||'?').charAt(0))}</span>`;return `<div class="pagehead"><h1 class="withicon">${avoDeco('tiny')}הגדרות</h1></div><div class="settings-stack v7set"><section class="setgroup profile-card has-avo">${avoDeco('mark')}<div class="prof-row"><button type="button" class="prof-photo" id="open-photo-menu" aria-label="שינוי תמונת פרופיל">${bigAv}${camBadge}</button><div class="prof-fields"><input id="profile-name" class="prof-name-input" maxlength="35" value="${esc(me.name)}" placeholder="השם שלך" autocomplete="given-name" aria-label="השם שלך"><small>הדגמה מקומית</small></div><button class="primary sm" id="save-profile">שמירה</button></div><p id="photo-error" role="alert"></p><input class="uploadinput" type="file" id="profile-photo" accept="image/*" hidden><div id="photo-menu" class="photo-sheet" hidden><div class="photo-sheet-inner" role="dialog" aria-label="שינוי תמונת פרופיל"><div class="photo-sheet-handle" aria-hidden="true"></div><h3>שינוי תמונה</h3><button type="button" id="photo-pick">בחירת תמונה</button>${me.photo?`<button type="button" class="dangerish" id="remove-photo">הסרת תמונה</button>`:'<button type="button" id="remove-photo" hidden disabled>הסרת תמונה</button>'}<button type="button" class="quiet" id="photo-cancel">ביטול</button></div></div></section><div class="setlabel">הבית</div><section class="setgroup" id="household-card"><div class="setrow"><label for="house-name-edit">שם</label><input id="house-name-edit" maxlength="80" value="${esc(data.houseName||'הבית שלנו')}" placeholder="משפחת כהן, המגניבים…"><button class="primary sm" id="save-house-name">שמירה</button></div><div class="setrow members-row"><span class="setrow-label">חברי הבית</span><div class="members-block">${`<div class="memberrow">${avatar('roei')}<span>${esc(me.name)} · את/ה</span></div><div class="memberrow">${avatar('maya')}<span>${esc(data.profiles.maya.name)}</span></div>`}</div></div><button type="button" class="setrow setlink" data-go="invite"><span>הזמנה לבית · QR</span>${svg('chev')}</button></section></div>`}
+
+
+const FIXES_KEY='casa-fixes';
+const CASA_OWNER_EMAIL='23roei23@gmail.com';
+const CASA_OWNER_UID='39feab6b-70a4-4259-adc4-7c1766d160b0';
+function isCasaOwner(){
+  if(!window.CASA_CLOUD||!CASA_CLOUD.active||!CASA_CLOUD.user)return false;
+  const email=String(CASA_CLOUD.user.email||'').trim().toLowerCase();
+  const id=String(CASA_CLOUD.user.id||'');
+  return email===CASA_OWNER_EMAIL||id===CASA_OWNER_UID;
+}
+function loadFixes(){try{const list=JSON.parse(localStorage.getItem(FIXES_KEY)||'[]');return Array.isArray(list)?list.filter(x=>x&&typeof x.id==='string'&&typeof x.text==='string'):[];}catch{return[]}}
+function saveFixes(list){try{localStorage.setItem(FIXES_KEY,JSON.stringify(list))}catch{}}
+function newFixId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function fixesCountLabel(list){const open=list.filter(x=>!x.done).length,done=list.length-open;if(!list.length)return'אין תיקונים עדיין';const o=open===1?'1 פתוח':open+' פתוחים';if(!done)return o;return o+' · '+(done===1?'1 בוצע':done+' בוצעו')}
+function sortedFixes(list){return list.slice().sort((a,b)=>(a.done===b.done?(a.at||0)-(b.at||0):a.done?1:-1))}
+const FIX_TRASH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 7h14M9 7V5h6v2M8 7l.7 12h6.6L16 7"/></svg>';
+function updateFixesCount(){const el=$('#fixes-count');if(el)el.textContent=fixesCountLabel(loadFixes())}
+function fixesRowHtml(){
+  if(!isCasaOwner())return '';
+  const sub=fixesCountLabel(loadFixes());
+  return `<section class="setgroup" id="fixes-wrap"><div class="srow" id="fixes-row"><span class="srow-ic">${svg('list')}</span><span class="srow-text"><b>תיקונים</b><small id="fixes-count">${esc(sub)}</small></span><button type="button" class="srow-iconbtn" id="fix-add-open" aria-label="הוספת תיקון">${svg('plus')}</button><button type="button" class="srow-iconbtn" id="fix-list-open" aria-label="צפייה בתיקונים">${svg('eye')}</button></div></section>`;
+}
+function fixRowsHtml(){
+  const list=sortedFixes(loadFixes());
+  if(!list.length)return '<li class="fix-empty">עוד אין תיקונים. תרשמו כאן מה לתקן.</li>';
+  return list.map(item=>`<li class="fix-row${item.done?' is-done':''}" data-fix-id="${esc(item.id)}"><button type="button" class="check${item.done?' done':''}" data-fix-toggle="${esc(item.id)}" aria-pressed="${item.done?'true':'false'}" aria-label="${item.done?'סימון כלא בוצע':'סימון כבוצע'}">${item.done?'✓':''}</button><button type="button" class="fix-text${item.done?' completed':''}" data-fix-edit="${esc(item.id)}">${esc(item.text)}</button><button type="button" class="li-del" data-fix-del="${esc(item.id)}" aria-label="מחיקת התיקון">${FIX_TRASH}</button></li>`).join('');
+}
+function openFixAddSheet(){
+  const s=openSheet(`<h3>תיקון חדש</h3><input id="fix-input" maxlength="200" placeholder="מה לתקן?" autocomplete="off" enterkeyhint="done" aria-label="מה לתקן?"><div class="sheet-actions"><button class="primary" id="fix-add">הוספה</button><button class="secondary" id="fix-add-cancel">ביטול</button></div>`,'תיקון חדש');
+  const input=s.querySelector('#fix-input');
+  const add=()=>{const text=(input.value||'').trim();if(!text){input.focus();return}const list=loadFixes();list.push({id:newFixId(),text,done:false,at:Date.now()});saveFixes(list);updateFixesCount();closeSheet();toast('נוסף לרשימת התיקונים')};
+  s.querySelector('#fix-add').onclick=add;
+  s.querySelector('#fix-add-cancel').onclick=closeSheet;
+  input.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();add()}};
+  setTimeout(()=>input.focus(),50);
+}
+function bindFixListSheet(s){
+  const listEl=s.querySelector('.fixes-list');
+  const clear=s.querySelector('#fix-clear-done');
+  const refresh=()=>{listEl.innerHTML=fixRowsHtml();const hasDone=loadFixes().some(x=>x.done);if(clear){clear.disabled=!hasDone;clear.classList.toggle('is-disabled',!hasDone)}updateFixesCount()};
+  s.querySelector('.fixes-panel')?.addEventListener('click',e=>{
+    const tog=e.target.closest('[data-fix-toggle]');
+    if(tog){const list=loadFixes();const it=list.find(x=>x.id===tog.dataset.fixToggle);if(!it)return;it.done=!it.done;saveFixes(list);refresh();return}
+    const del=e.target.closest('[data-fix-del]');
+    if(del){saveFixes(loadFixes().filter(x=>x.id!==del.dataset.fixDel));refresh();return}
+    const ed=e.target.closest('[data-fix-edit]');
+    if(ed)startFixEdit(ed.dataset.fixEdit,refresh);
+  });
+  if(clear)clear.onclick=()=>{const list=loadFixes();if(!list.some(x=>x.done)){toast('אין תיקונים שבוצעו');return}saveFixes(list.filter(x=>!x.done));refresh();toast('התיקונים שבוצעו נוקו')};
+}
+function openFixListSheet(){
+  const hasDone=loadFixes().some(x=>x.done);
+  const s=openSheet(`<h3>תיקונים</h3><p class="sub" id="fixes-sheet-count">${esc(fixesCountLabel(loadFixes()))}</p><ul class="fixes-list">${fixRowsHtml()}</ul><button type="button" class="quiet${hasDone?'':' is-disabled'}" id="fix-clear-done"${hasDone?'':' disabled'}>נקה שבוצעו</button>`,'תיקונים');
+  s.querySelector('.v7-sheet-inner')?.classList.add('fixes-sheet');
+  bindFixListSheet(s);
+}
+function startFixEdit(id,after){
+  const row=document.querySelector(`[data-fix-id="${CSS.escape(id)}"]`);
+  if(!row||row.querySelector('.fix-edit'))return;
+  const item=loadFixes().find(x=>x.id===id);if(!item)return;
+  const btn=row.querySelector('.fix-text');
+  const input=document.createElement('input');input.className='fix-edit';input.value=item.text;input.maxLength=200;
+  btn.replaceWith(input);input.focus();input.select();
+  const commit=ok=>{if(input.dataset.closed)return;input.dataset.closed='1';const text=input.value.trim();if(ok&&text&&text!==item.text){const list=loadFixes();const it=list.find(x=>x.id===id);if(it){it.text=text;saveFixes(list)}}if(typeof after==='function')after();else {const span=document.createElement('button');span.type='button';span.className='fix-text'+(item.done?' completed':'');span.dataset.fixEdit=id;span.textContent=loadFixes().find(x=>x.id===id)?.text||item.text;input.replaceWith(span)}};
+  input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();commit(true)}if(e.key==='Escape'){e.preventDefault();commit(false)}});
+  input.addEventListener('blur',()=>commit(true));
+}
+function bindFixes(){
+  const add=$('#fix-add-open'),list=$('#fix-list-open');
+  if(add)add.onclick=e=>{e.preventDefault();e.stopPropagation();openFixAddSheet()};
+  if(list)list.onclick=e=>{e.preventDefault();e.stopPropagation();openFixListSheet()};
+}
+function currentInvite(){
+  if(window.CASA_CLOUD&&CASA_CLOUD.active&&CASA_CLOUD.invite){
+    const linkFn=CASA_CLOUD.inviteLink|| (typeof inviteLink==='function'?inviteLink:null);
+    const srcFn=CASA_CLOUD.qrSrc|| (typeof qrSrc==='function'?qrSrc:null);
+    const url=linkFn?linkFn():'';
+    const src=srcFn?srcFn(url):'';
+    const exp=CASA_CLOUD.invite.expires_at?new Date(CASA_CLOUD.invite.expires_at).toLocaleDateString('he-IL',{timeZone:'Europe/Prague'}):'';
+    return {url,src,cloud:true,expires:exp};
+  }
+  if(typeof inviteUrl==='function'&&typeof qrData==='function')return {url:inviteUrl(),src:qrData(),cloud:false,demo:true};
+  return null;
+}
+function openInviteQrSheet(){
+  const inv=currentInvite();if(!inv||!inv.url){toast('מכינים קישור הזמנה…');return}
+  const share=inv.cloud?'<button class="primary" id="share-invite">שיתוף הקישור</button>':'';
+  const copyId=inv.cloud?'copy-invite-cloud':'copy-invite';
+  const copyLabel=inv.cloud?'העתקה':'העתקת קישור לשיתוף';
+  const renew=inv.cloud?'<button class="quiet" id="renew-invite">יצירת קישור חדש (הישן יבוטל)</button>':'';
+  const exp=inv.expires?`<div class="footnote">הקישור פתוח עד ${esc(inv.expires)} או עד ביטול.</div>`:'';
+  const s=openSheet(`<h3>הזמנה לבית</h3><p class="sub">הזמנת בן/בת בית — סריקה או קישור</p><img class="qr" id="invite-qr" src="${esc(inv.src)}" alt="QR להצטרפות לבית"><div class="link" id="invite-link">${esc(inv.url)}</div><div class="invite-actions">${share}<button class="${inv.cloud?'secondary':'primary'}" id="${copyId}">${copyLabel}</button></div>${renew}${exp}`,'הזמנה לבית');
+  bindInviteSheetActions(s);
+}
+function bindInviteSheetActions(root){
+  const urlOf=()=>(root.querySelector('#invite-link')?.textContent||'').trim();
+  const copy=root.querySelector('#copy-invite-cloud, #copy-invite');
+  if(copy)copy.onclick=async()=>{try{await navigator.clipboard.writeText(urlOf());toast(CASA_CLOUD.active?'הקישור הועתק':'הקישור להדגמה הועתק. לא נשלחה הזמנה.')}catch{toast('אפשר להעתיק את הקישור שמוצג')}};
+  const share=root.querySelector('#share-invite');
+  if(share)share.onclick=async()=>{const url=urlOf();try{if(navigator.share){await navigator.share({title:'CASA',text:`הצטרפות ${CASA_CLOUD.hh?.name?('לבית '+CASA_CLOUD.hh.name):'לבית'} ב־CASA`,url});return}}catch(e){if(e?.name==='AbortError')return}try{await navigator.clipboard.writeText(url);toast('הקישור הועתק')}catch{toast('אפשר להעתיק את הקישור שמוצג')}};
+  const renew=root.querySelector('#renew-invite');
+  if(renew&&CASA_CLOUD.onRenewInvite)renew.onclick=()=>CASA_CLOUD.onRenewInvite();
+}
+function bindInviteQr(){
+  const btn=$('#toggle-invite-qr');
+  if(!btn)return;
+  btn.onclick=e=>{e.preventDefault();e.stopPropagation();openInviteQrSheet()};
+}
+function srow(opts){
+  const ic=opts.icon?`<span class="srow-ic">${opts.icon}</span>`:'';
+  const sub=opts.sub?`<small>${opts.sub}</small>`:'';
+  const end=opts.end||'';
+  const tag=opts.button?'button type="button"':'div';
+  const close=opts.button?'</button>':'</div>';
+  const extra=opts.attrs||'';
+  return `<${tag} class="srow${opts.cls?' '+opts.cls:''}"${extra}>${ic}<span class="srow-text"><b>${opts.title}</b>${sub}</span>${end}${close}`;
+}
+
+function settings(){if(CASA_CLOUD.active)return CASA_CLOUD.settings();const me=data.profiles.roei;const bigAv=(me.photo&&photoTag(me.photo,'avatar profilephoto prof-av',me.name||''))||`<span class="avatar initials prof-av" aria-hidden="true">${esc((me.name||'?').charAt(0))}</span>`;const members=`<div class="memberrow">${avatar('roei')}<span>${esc(me.name)} · את/ה</span></div><div class="memberrow">${avatar('maya')}<span>${esc(data.profiles.maya.name)}</span></div>`;return `<div class="pagehead"><h1 class="withicon">${avoDeco('tiny')}הגדרות</h1></div><div class="settings-stack v7set"><section class="setgroup profile-card has-avo">${avoDeco('mark')}<div class="prof-row"><button type="button" class="prof-photo" id="open-photo-menu" aria-label="שינוי תמונת פרופיל">${bigAv}${camBadge}</button><div class="prof-fields"><input id="profile-name" class="prof-name-input" maxlength="35" value="${esc(me.name)}" placeholder="השם שלך" autocomplete="given-name" aria-label="השם שלך"><small>הדגמה מקומית</small></div><button class="primary sm" id="save-profile">שמירה</button></div><p id="photo-error" role="alert"></p><input class="uploadinput" type="file" id="profile-photo" accept="image/*" hidden><div id="photo-menu" class="photo-sheet" hidden><div class="photo-sheet-inner" role="dialog" aria-label="שינוי תמונת פרופיל"><div class="photo-sheet-handle" aria-hidden="true"></div><h3>שינוי תמונה</h3><button type="button" id="photo-pick">בחירת תמונה</button>${me.photo?`<button type="button" class="dangerish" id="remove-photo">הסרת תמונה</button>`:'<button type="button" id="remove-photo" hidden disabled>הסרת תמונה</button>'}<button type="button" class="quiet" id="photo-cancel">ביטול</button></div></div></section><div class="setlabel">הבית</div><section class="setgroup" id="household-card"><div class="srow"><span class="srow-ic">${svg('home')}</span><span class="srow-text"><b><label for="house-name-edit">שם הבית</label></b></span><input id="house-name-edit" maxlength="80" value="${esc(data.houseName||'הבית שלנו')}" placeholder="משפחת כהן, המגניבים…"><button class="srow-btn primary sm" id="save-house-name">שמירה</button></div><div class="srow members-row"><span class="srow-ic">${svg('users')}</span><span class="srow-text"><b>חברי הבית</b></span><div class="members-block">${members}</div></div><div class="srow"><span class="srow-ic">${svg('qr')}</span><span class="srow-text"><b>הזמנה לבית</b><small>הזמנת בן/בת בית — סריקה או קישור</small></span><button type="button" class="srow-btn" id="toggle-invite-qr">QR</button></div></section></div>`}
 
 /* ---------- shell ---------- */
 function go(p){if(p!==page){closeSheet();closePhotoView();if(p!=='shopping'){lastAddedId=null;pendingPhoto=null}if(p==='meal-edit'){const ex=editingMealId?getMenu().find(m=>m.id===editingMealId):null;dishDraftPhoto=ex?.photo||null}if(page==='supermarket')releaseWake();if(p!=='meals')menuEdit=false}page=p;render();resetScroll();requestAnimationFrame(()=>{resetScroll();requestAnimationFrame(resetScroll)})}
